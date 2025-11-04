@@ -1,34 +1,70 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
+    // Type Checking
     "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "allowUnusedLabels": true,
+    // Module Resolution
+    "target": "ES2020",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false,
+
+    // Interop Constraints
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+
+    // Emit
+    "noEmit": true,
+    "jsx": "preserve",
     "incremental": true,
+    // Path Mapping
+    // "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/shared/*": ["./src/shared/*"],
+      "@/store/*": ["./src/store/*"],
+      "@/providers/*": ["./src/providers/*"],
+      "@/types/*": ["./src/shared/types/*"],
+      "@/lib/*": ["./src/shared/lib/*"],
+      "@/hooks/*": ["./src/shared/hooks/*"],
+      "@/components/*": ["./src/shared/components/*"],
+      "@/config/*": ["./src/shared/config/*"],
+      "@/utils/*": ["./src/shared/lib/utils/*"],
+      "@/styles/*":["./src/shared/styles/*"]
+    },
+
+    // Language and Environment
+    "skipLibCheck": true,
+
+    // Next.js specific
     "plugins": [
       {
         "name": "next"
       }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    ]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts"
-  ],
-  "exclude": ["node_modules"]
+    ".next/types/**/*.ts"
+, "src/features/work-orders/components/work-order-form.tsw"  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "out",
+    "dist"
+  ]
 }
