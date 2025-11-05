@@ -36,7 +36,7 @@ export interface WorkOrder {
 }
 
 export interface CreateWorkOrderDto {
-  title: string;
+  title?: string;
   description?: string;
   priority: WorkOrderPriority;
   assetId: string;

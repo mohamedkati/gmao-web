@@ -1,26 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Role } from '../lib/permissions/role-definitions';
 import { Permission } from '../lib/permissions/permissions.constants';
+import { User } from './user.types';
 
-/**
- * Utilisateur authentifié
- */
-export interface User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  avatar?: string;
-  role: Role;
-  permissions: Permission[];
-  tenantId: string;
-  emailVerified: boolean;
-  phone?: string;
-  metadata?: Record<string, any>;
-  createdAt: Date | string;
-  updatedAt: Date | string;
-}
+
 
 /**
  * Credentials de connexion

@@ -1,21 +1,21 @@
 "use client"
 
-import { useToast } from "@/shared/hooks/use-toast"
+// import { useToast } from "@/shared/hooks/use-toast"
 import {
-  Toast,
-  ToastClose,
-  ToastDescription,
+  // Toast,
+  // ToastClose,
+  // ToastDescription,
   ToastProvider,
-  ToastTitle,
+  // ToastTitle,
   ToastViewport,
 } from "@/shared/components/shadcnui/toast"
 
 export function Toaster() {
-  const { toasts } = useToast()
+  // const { toasts } = useToast()
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
+      {/* {toasts.map(function ({ id, title, description, action, ...props }) {
         return (
           <Toast key={id} {...props}>
             <div className="grid gap-1">
@@ -28,7 +28,7 @@ export function Toaster() {
             <ToastClose />
           </Toast>
         )
-      })}
+      })} */}
       <ToastViewport />
     </ToastProvider>
   )

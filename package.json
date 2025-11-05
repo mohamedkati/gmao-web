@@ -17,6 +17,7 @@
     "e2e:ui": "playwright test --ui"
   },
   "dependencies": {
+    "@faker-js/faker": "^10.1.0",
     "@hookform/resolvers": "^3.10.0",
     "@microsoft/signalr": "^8.0.7",
     "@radix-ui/react-accordion": "^1.2.12",

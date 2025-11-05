@@ -20,7 +20,7 @@ export const ROUTES = {
   WORK_ORDER_DETAIL: (id: string) => `/work-orders/${id}`,
   WORK_ORDER_EDIT: (id: string) => `/work-orders/${id}/edit`,
   WORK_ORDER_HISTORY: (id: string) => `/work-orders/${id}/history`,
-  
+
   // Assets
   ASSETS: '/assets',
   ASSETS_NEW: '/assets/new',

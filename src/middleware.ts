@@ -8,59 +8,56 @@ const publicRoutes = ['/', '/login', '/register', '/forgot-password', '/reset-pa
 const apiRoutes = ['/api'];
 
 export function middleware(request: NextRequest) {
-  // const { pathname } = request.nextUrl;
+  const { pathname } = request.nextUrl;
   console.log(request);
   console.log(apiRoutes);
   console.log(publicRoutes);
   
-  // // Ignorer les routes API
-  // if (apiRoutes.some((route) => pathname.startsWith(route))) {
-  //   return NextResponse.next();
-  // }
+  // Ignorer les routes API
+  if (apiRoutes.some((route) => pathname.startsWith(route))) {
+    return NextResponse.next();
+  }
 
-  // // Ignorer les fichiers statiques
-  // if (
-  //   pathname.startsWith('/_next') ||
-  //   pathname.startsWith('/static') ||
-  //   pathname.includes('.')
-  // ) {
-  //   return NextResponse.next();
-  // }
-  // const isPublicRoute = publicRoutes.includes(pathname);
-  // if (isPublicRoute)
-  //   return NextResponse.redirect(new URL('/dashboard', request.url));
-  // // Extraction du tenant
+  // Ignorer les fichiers statiques
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/static') ||
+    pathname.includes('.')
+  ) {
+    return NextResponse.next();
+  }
+  const isPublicRoute = publicRoutes.includes(pathname);
+  // Extraction du tenant
   // const tenant = extractTenant(request);
 
-  // // Vérification de l'authentification
-  // const token = request.cookies.get('auth-token')?.value;
+  // Vérification de l'authentification
+  const token = request.cookies.get('auth-token')?.value;
 
-
-  // // Redirect vers login si pas authentifié sur route privée
+  // Redirect vers login si pas authentifié sur route privée
   // if (!isPublicRoute && !token) {
   //   const loginUrl = new URL('/login', request.url);
   //   loginUrl.searchParams.set('redirect', pathname);
   //   return NextResponse.redirect(loginUrl);
   // }
 
-  // // Redirect vers dashboard si authentifié sur route publique
+  // Redirect vers dashboard si authentifié sur route publique
   // if (isPublicRoute && token && pathname !== '/') {
   //   return NextResponse.redirect(new URL('/dashboard', request.url));
   // }
 
-  // // Créer la réponse
+  // Créer la réponse
   const response = NextResponse.next();
 
-  // // Ajouter les headers custom
+  // Ajouter les headers custom
   // if (tenant) {
   //   response.headers.set('X-Tenant-Id', tenant.id);
   //   response.headers.set('X-Tenant-Subdomain', tenant.subdomain);
   // }
 
-  // // Ajouter le token dans les headers si présent
-  // if (token) {
-  //   response.headers.set('X-Auth-Token', token);
-  // }
+  // Ajouter le token dans les headers si présent
+  if (token) {
+    response.headers.set('X-Auth-Token', token);
+  }
 
   return response;
 }

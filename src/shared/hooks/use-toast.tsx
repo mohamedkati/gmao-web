@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import {  useCallback } from 'react';
 import { toast as sonnerToast } from 'sonner';
 
 export type ToastVariant = 'default' | 'success' | 'error' | 'warning' | 'info';
@@ -15,6 +15,7 @@ interface ToastOptions {
   };
 }
 
+
 /**
  * Hook pour afficher des toasts
  */
@@ -22,13 +23,13 @@ export function useToast() {
   const toast = useCallback((variant: ToastVariant, options: ToastOptions) => {
     const { title, description, duration = 5000, action } = options;
 
-    const message = title ? (
-      `<div>
-        <div className="font-semibold">${title}</div>
-        ${(description && `<div className="text-sm">${description}</div>`)}
-      </div>`
+    const message: React.ReactNode = title ? (
+      <div>
+        <div className="font-semibold" > {title} </div>
+        {description} && <div className="text-sm" > {description} </div>
+      </div>
     ) : (
-      description
+       description
     );
 
     switch (variant) {
