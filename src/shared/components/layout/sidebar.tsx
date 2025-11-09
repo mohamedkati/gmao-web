@@ -19,6 +19,7 @@ import {
 import { cn } from '@/shared/lib/utils/cn';
 import { Button } from '@/shared/components/ui/button';
 import { ScrollArea } from '@/shared/components/shadcnui/scroll-area';
+import { Separator } from '@/shared/components/ui/separator';
 import { useUIStore } from '@/store/ui.store';
 import { useIsMobile } from '@/shared/hooks/use-media-query';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/components/shadcnui/tooltip';
@@ -35,9 +36,6 @@ const navigation = [
   { name: 'Rapports', href: '/reports', icon: BarChart3 },
 ];
 
-/**
- * Sidebar de navigation principale
- */
 export function Sidebar() {
   const pathname = usePathname();
   const { sidebarCollapsed, toggleSidebarCollapsed, sidebarOpen, setSidebarOpen } = useUIStore();
@@ -54,29 +52,37 @@ export function Sidebar() {
     <>
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex flex-col bg-card border-r transition-all duration-300',
+          'fixed inset-y-0 left-0 z-50 flex flex-col',
+          'bg-sidebar border-r border-sidebar-border',
+          'transition-all duration-300 ease-in-out',
           sidebarCollapsed ? 'w-20' : 'w-64',
           isMobile && !sidebarOpen && '-translate-x-full',
           isMobile && 'lg:translate-x-0'
         )}
       >
         {/* Logo */}
-        <div className={cn(
-          'h-16 flex items-center border-b px-4',
-          sidebarCollapsed ? 'justify-center' : 'justify-between'
-        )}>
+        <div
+          className={cn(
+            'h-16 flex items-center border-b border-sidebar-border px-4',
+            'bg-gradient-to-r from-sidebar to-sidebar/95',
+            sidebarCollapsed ? 'justify-center' : 'justify-between'
+          )}
+        >
           {sidebarCollapsed ? (
-            <div className="p-2 bg-primary/10 rounded-lg">
+            <div className="p-2 bg-primary/20 rounded-xl backdrop-blur-sm ring-1 ring-primary/30">
               <Wrench className="h-6 w-6 text-primary" />
             </div>
           ) : (
-            <Link href="/dashboard" className="flex items-center gap-2 group">
-              <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                <Wrench className="h-5 w-5 text-primary" />
+            <Link href="/dashboard" className="flex items-center gap-3 group">
+              <div className="relative">
+                <div className="absolute inset-0 bg-primary/20 blur-xl rounded-xl"></div>
+                <div className="relative p-2 bg-gradient-to-br from-primary to-primary/80 rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-primary/50">
+                  <Wrench className="h-5 w-5 text-white" />
+                </div>
               </div>
               <div>
-                <h1 className="text-lg font-bold">GMAO Pro</h1>
-                <p className="text-xs text-muted-foreground">Maintenance</p>
+                <h1 className="text-lg font-bold text-sidebar-foreground">GMAO Pro</h1>
+                <p className="text-xs text-sidebar-foreground/60">Maintenance</p>
               </div>
             </Link>
           )}
@@ -95,16 +101,36 @@ export function Sidebar() {
                     href={item.href}
                     onClick={() => isMobile && setSidebarOpen(false)}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
-                      'hover:bg-accent hover:text-accent-foreground',
+                      'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                      'hover:bg-sidebar-accent group relative overflow-hidden',
                       active
-                        ? 'bg-primary text-primary-foreground shadow-sm'
-                        : 'text-muted-foreground',
+                        ? 'bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg shadow-primary/30'
+                        : 'text-sidebar-foreground/70 hover:text-sidebar-foreground',
                       sidebarCollapsed && 'justify-center'
                     )}
                   >
-                    <Icon className={cn('h-5 w-5 flex-shrink-0', active && 'animate-in')} />
-                    {!sidebarCollapsed && <span>{item.name}</span>}
+                    {/* Animated background on hover */}
+                    {!active && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    )}
+                    
+                    {/* Icon with animation */}
+                    <div className={cn(
+                      'relative z-10 transition-transform duration-200',
+                      active ? 'scale-110' : 'group-hover:scale-110'
+                    )}>
+                      <Icon className="h-5 w-5 flex-shrink-0" />
+                    </div>
+                    
+                    {/* Label */}
+                    {!sidebarCollapsed && (
+                      <span className="relative z-10">{item.name}</span>
+                    )}
+                    
+                    {/* Active indicator */}
+                    {active && !sidebarCollapsed && (
+                      <div className="ml-auto h-2 w-2 rounded-full bg-white/80 animate-pulse"></div>
+                    )}
                   </Link>
                 );
 
@@ -114,7 +140,7 @@ export function Sidebar() {
                       <TooltipTrigger asChild>
                         {linkContent}
                       </TooltipTrigger>
-                      <TooltipContent side="right">
+                      <TooltipContent side="right" className="bg-sidebar border-sidebar-border">
                         <p>{item.name}</p>
                       </TooltipContent>
                     </Tooltip>
@@ -128,7 +154,7 @@ export function Sidebar() {
         </ScrollArea>
 
         {/* Footer */}
-        <div className="border-t p-3 space-y-2">
+        <div className="border-t border-sidebar-border p-3 space-y-2 bg-sidebar/50 backdrop-blur-sm">
           {/* Settings */}
           <TooltipProvider delayDuration={0}>
             <Tooltip>
@@ -136,17 +162,17 @@ export function Sidebar() {
                 <Link
                   href="/settings"
                   className={cn(
-                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-                    'hover:bg-accent hover:text-accent-foreground text-muted-foreground',
+                    'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                    'hover:bg-sidebar-accent text-sidebar-foreground/70 hover:text-sidebar-foreground group',
                     sidebarCollapsed && 'justify-center'
                   )}
                 >
-                  <Settings className="h-5 w-5" />
+                  <Settings className="h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
                   {!sidebarCollapsed && <span>Paramètres</span>}
                 </Link>
               </TooltipTrigger>
               {sidebarCollapsed && (
-                <TooltipContent side="right">
+                <TooltipContent side="right" className="bg-sidebar border-sidebar-border">
                   <p>Paramètres</p>
                 </TooltipContent>
               )}
@@ -159,7 +185,10 @@ export function Sidebar() {
               variant="ghost"
               size={sidebarCollapsed ? 'icon' : 'sm'}
               onClick={toggleSidebarCollapsed}
-              className={cn('w-full', sidebarCollapsed && 'justify-center')}
+              className={cn(
+                'w-full text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent',
+                sidebarCollapsed && 'justify-center'
+              )}
             >
               {sidebarCollapsed ? (
                 <ChevronRight className="h-4 w-4" />

@@ -7,30 +7,23 @@ import { useUIStore } from '@/store/ui.store';
 import { cn } from '@/shared/lib/utils/cn';
 import { useIsMobile } from '@/shared/hooks/use-media-query';
 
-export interface AppLayoutProps {
+interface AppLayoutProps {
   children: ReactNode;
 }
 
-/**
- * Layout principal de l'application
- */
-export default  function AppLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function AppLayout({ children }: AppLayoutProps) {
   const { sidebarCollapsed, sidebarOpen, setSidebarOpen } = useUIStore();
   const isMobile = useIsMobile();
 
   return (
-    <div className="h-screen flex overflow-hidden bg-background">
+    <div className="h-screen flex overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Mobile overlay */}
       {isMobile && sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -46,8 +39,13 @@ export default  function AppLayout({
         <Header />
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-muted/30">
-          <div className="container mx-auto p-6 space-y-6">{children}</div>
+        <main className="flex-1 overflow-y-auto">
+          {/* Subtle gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none"></div>
+          
+          <div className="relative container mx-auto p-6 space-y-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>

@@ -10,8 +10,8 @@ interface WorkOrderDetailPageProps {
   };
 }
 
-export default async function WorkOrderDetailPage(params: Promise<WorkOrderDetailPageProps>) {
-    const id = (await params).params.id;
+export default async function WorkOrderDetailPage({params}: WorkOrderDetailPageProps) {
+    const id = params.id;
   return (
     <div className="space-y-6">
       {/* Breadcrumb */}

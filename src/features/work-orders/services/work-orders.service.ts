@@ -10,7 +10,7 @@ import type { PaginatedResponse } from '@/shared/types/common.types';
 import { generateMockWorkOrder, generateMockWorkOrders } from './mock/work-orders.mock';
 
 
-let MOCK_DATA: WorkOrder[] = generateMockWorkOrders(15000); // jeu de données initial
+let MOCK_DATA: WorkOrder[] = generateMockWorkOrders(150); // jeu de données initial
 
 function simulateDelay(ms = 400) {
     return new Promise((res) => setTimeout(res, ms));

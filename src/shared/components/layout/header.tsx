@@ -1,6 +1,6 @@
 'use client';
 
-import { Menu, Search, User } from 'lucide-react';
+import { Bell, Menu, Search } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import {
@@ -12,25 +12,28 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import { Badge } from '@/shared/components/ui/badge';
 import { useUIStore } from '@/store/ui.store';
 import { useAuth } from '@/shared/hooks/use-auth';
 import { useNotificationsStore } from '@/store/notification.store';
 import { getInitials } from '@/shared/lib/utils/string';
+import { ThemeToggle } from './theme-toggle';
 import { NotificationsPopover } from './notifications-popover';
 import { useIsMobile } from '@/shared/hooks/use-media-query';
-import { ThemeToggle } from './theme-toggle';
+import { cn } from '@/shared/lib/utils/cn';
 
-/**
- * Header principal de l'application
- */
 export function Header() {
   const { setSidebarOpen } = useUIStore();
   const { user, logout } = useAuth();
   const { unreadCount } = useNotificationsStore();
   const isMobile = useIsMobile();
-  console.log(unreadCount);
+
   return (
-    <header className="h-16 border-b bg-card/50 backdrop-blur-sm sticky top-0 z-40">
+    <header className={cn(
+      'h-16 border-b sticky top-0 z-40',
+      'bg-card/80 backdrop-blur-xl',
+      'border-border/50'
+    )}>
       <div className="h-full flex items-center justify-between px-4 gap-4">
         {/* Left: Mobile Menu + Search */}
         <div className="flex items-center gap-3 flex-1">
@@ -38,7 +41,7 @@ export function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="lg:hidden hover:bg-accent"
             onClick={() => setSidebarOpen(true)}
           >
             <Menu className="h-5 w-5" />
@@ -46,11 +49,18 @@ export function Header() {
 
           {/* Search Bar */}
           <div className="relative flex-1 max-w-md hidden sm:block">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
+              <Search className="h-4 w-4" />
+            </div>
             <Input
               type="search"
               placeholder="Rechercher... (⌘K)"
-              className="pl-10 bg-background/50"
+              className={cn(
+                'pl-10 h-9',
+                'bg-muted/50 border-border/50',
+                'focus:bg-background focus:border-primary/50',
+                'transition-all duration-200'
+              )}
             />
           </div>
         </div>
@@ -66,10 +76,16 @@ export function Header() {
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-10 gap-2 px-2">
-                <Avatar className="h-8 w-8">
+              <Button
+                variant="ghost"
+                className={cn(
+                  'relative h-10 gap-2 px-2',
+                  'hover:bg-accent transition-colors'
+                )}
+              >
+                <Avatar className="h-8 w-8 ring-2 ring-primary/20">
                   <AvatarImage src={user?.avatar} alt={user?.fullName} />
-                  <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground font-semibold text-sm">
                     {user ? getInitials(user.fullName) : 'U'}
                   </AvatarFallback>
                 </Avatar>
@@ -92,21 +108,19 @@ export function Header() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <a href="/settings/profile">
-                  <User className="mr-2 h-4 w-4" />
+                <a href="/settings/profile" className="cursor-pointer">
                   Profil
                 </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <a href="/settings">
-                  <User className="mr-2 h-4 w-4" />
+                <a href="/settings" className="cursor-pointer">
                   Paramètres
                 </a>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={logout}
-                className="text-destructive focus:text-destructive"
+                className="text-destructive focus:text-destructive cursor-pointer"
               >
                 Se déconnecter
               </DropdownMenuItem>
