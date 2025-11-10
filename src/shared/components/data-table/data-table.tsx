@@ -11,6 +11,7 @@ import {
   ColumnFiltersState,
   VisibilityState,
   useReactTable,
+  type Row,
 } from '@tanstack/react-table';
 import { useState } from 'react';
 import {
@@ -24,6 +25,7 @@ import {
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableToolbar } from './data-table-toolbar';
 import { Skeleton } from '@/shared/components/shadcnui/skeleton';
+import { cn } from '@/shared/lib/utils/cn';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,6 +35,7 @@ interface DataTableProps<TData, TValue> {
   onRowClick?: (row: TData) => void;
   isLoading?: boolean;
   toolbar?: React.ReactNode;
+  getRowClassName?: (row: Row<TData>) => string;
 }
 
 /**
@@ -46,6 +49,7 @@ export function DataTable<TData, TValue>({
   onRowClick,
   isLoading = false,
   toolbar,
+   getRowClassName,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -119,7 +123,8 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                   onClick={() => onRowClick?.(row.original)}
-                  className={onRowClick ? 'cursor-pointer' : ''}
+                  // className={onRowClick ? 'cursor-pointer' : ''}
+                   className={cn(onRowClick ? 'cursor-pointer' : '', getRowClassName?.(row))}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
