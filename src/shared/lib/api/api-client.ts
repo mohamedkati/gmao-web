@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { Axios, AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 // import { API_ENDPOINTS } from '../constants/api.constants';
 import { getTenantId } from '../tenant/tenant-utils';
 import { getAuthToken, refreshToken, clearTokens } from '../auth/token-manager';
@@ -7,132 +7,271 @@ import { getAuthToken, refreshToken, clearTokens } from '../auth/token-manager';
 /**
  * Instance Axios configurée pour l'application
  */
-const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  timeout: Number(process.env.NEXT_PUBLIC_API_TIMEOUT) || 30000,
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  },
-  withCredentials: true, // Pour les cookies
-});
-
-/**
- * Request Interceptor
- * Ajoute automatiquement le token et le tenant ID
- */
-apiClient.interceptors.request.use(
-  async (config) => {
-    // Ajouter le token d'authentification
-    const token = getAuthToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    // Ajouter le Tenant ID
-    const tenantId = getTenantId();
-    if (tenantId) {
-      config.headers['X-Tenant-Id'] = tenantId;
-    }
-
-    // Ajouter un request ID pour le tracking
-    config.headers['X-Request-Id'] = generateRequestId();
-
-    // Log en développement
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`, {
-        headers: config.headers,
-        data: config.data,
-      });
-    }
-
-    return config;
-  },
-  (error) => {
-    console.error('[API Request Error]', error);
-    return Promise.reject(error);
-  }
-);
-
-/**
- * Response Interceptor
- * Gère automatiquement le refresh token et les erreurs
- */
-apiClient.interceptors.response.use(
-  (response: AxiosResponse) => {
-    // Log en développement
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[API Response] ${response.config.method?.toUpperCase()} ${response.config.url}`, {
-        status: response.status,
-        data: response.data,
-      });
-    }
-
-    return response;
-  },
-  async (error: AxiosError) => {
-    const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
-
-    // Gestion du 401 (Unauthorized) - Tentative de refresh token
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        const newToken = await refreshToken();
-        
-        if (newToken && originalRequest.headers) {
-          originalRequest.headers.Authorization = `Bearer ${newToken}`;
-          return apiClient(originalRequest);
-        }
-      } catch (refreshError) {
-        // Impossible de rafraîchir le token
-        clearTokens();
-        
-        // Redirect vers login (côté client uniquement)
-        if (typeof window !== 'undefined') {
-          window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
-        }
-        
-        return Promise.reject(refreshError);
-      }
-    }
-
-    // Gestion du 403 (Forbidden)
-    if (error.response?.status === 403) {
-      console.error('[API] Accès refusé:', error.response.data);
-      
-      if (typeof window !== 'undefined') {
-        // Afficher un message d'erreur
-        // toast.error('Vous n\'avez pas les permissions nécessaires');
-      }
-    }
-
-    // Gestion du 404 (Not Found)
-    if (error.response?.status === 404) {
-      console.error('[API] Ressource non trouvée:', error.config?.url);
-    }
-
-    // Gestion du 500 (Server Error)
-    if (error.response?.status === 500) {
-      console.error('[API] Erreur serveur:', error.response.data);
-      
-      if (typeof window !== 'undefined') {
-        // toast.error('Une erreur serveur est survenue');
-      }
-    }
-
-    // Log de l'erreur
-    console.error('[API Error]', {
-      url: error.config?.url,
-      method: error.config?.method,
-      status: error.response?.status,
-      message: error.message,
-      data: error.response?.data,
+class ClientApi {
+  private client: AxiosInstance;
+  constructor() {
+    this.client = axios.create({
+      baseURL: process.env.NEXT_PUBLIC_API_URL,
+      timeout: Number(process.env.NEXT_PUBLIC_API_TIMEOUT) || 30000,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      withCredentials: true, // Pour les cookies
     });
 
-    return Promise.reject(error);
+    /**
+     * Request Interceptor
+     * Ajoute automatiquement le token et le tenant ID
+     */
+    this.client.interceptors.request.use(
+      async (config) => {
+        // Ajouter le token d'authentification
+        const token = getAuthToken();
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+
+        // Ajouter le Tenant ID
+        const tenantId = getTenantId();
+        if (tenantId) {
+          config.headers['X-Tenant-Id'] = tenantId;
+        }
+
+        // Ajouter un request ID pour le tracking
+        config.headers['X-Request-Id'] = generateRequestId();
+
+        // Log en développement
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`, {
+            headers: config.headers,
+            data: config.data,
+          });
+        }
+
+        return config;
+      },
+      (error) => {
+        console.error('[API Request Error]', error);
+        return Promise.reject(error);
+      }
+    );
+
+    /**
+     * Response Interceptor
+     * Gère automatiquement le refresh token et les erreurs
+     */
+    this.client.interceptors.response.use(
+      (response: AxiosResponse) => {
+        // Log en développement
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[API Response] ${response.config.method?.toUpperCase()} ${response.config.url}`, {
+            status: response.status,
+            data: response.data,
+          });
+        }
+
+        return response;
+      },
+      async (error: AxiosError) => {
+        const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
+
+        // Gestion du 401 (Unauthorized) - Tentative de refresh token
+        if (error.response?.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+
+          try {
+            const newToken = await refreshToken();
+
+            if (newToken && originalRequest.headers) {
+              originalRequest.headers.Authorization = `Bearer ${newToken}`;
+              return apiClient(originalRequest);
+            }
+          } catch (refreshError) {
+            // Impossible de rafraîchir le token
+            clearTokens();
+
+            // Redirect vers login (côté client uniquement)
+            if (typeof window !== 'undefined') {
+              window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+            }
+
+            return Promise.reject(refreshError);
+          }
+        }
+
+        // Gestion du 403 (Forbidden)
+        if (error.response?.status === 403) {
+          console.error('[API] Accès refusé:', error.response.data);
+
+          if (typeof window !== 'undefined') {
+            // Afficher un message d'erreur
+            // toast.error('Vous n\'avez pas les permissions nécessaires');
+          }
+        }
+
+        // Gestion du 404 (Not Found)
+        if (error.response?.status === 404) {
+          console.error('[API] Ressource non trouvée:', error.config?.url);
+        }
+
+        // Gestion du 500 (Server Error)
+        if (error.response?.status === 500) {
+          console.error('[API] Erreur serveur:', error.response.data);
+
+          if (typeof window !== 'undefined') {
+            // toast.error('Une erreur serveur est survenue');
+          }
+        }
+
+        // Log de l'erreur
+        console.error('[API Error]', {
+          url: error.config?.url,
+          method: error.config?.method,
+          status: error.response?.status,
+          message: error.message,
+          data: error.response?.data,
+        });
+
+        return Promise.reject(error);
+      }
+    );
   }
-);
+
+  public get client_instance() {
+    return this.client;
+  }
+}
+// generate and config one axios instance for the whole app
+export const apiClient = new ClientApi().client_instance;
+
+
+// const apiClient = axios.create({
+//   baseURL: process.env.NEXT_PUBLIC_API_URL,
+//   timeout: Number(process.env.NEXT_PUBLIC_API_TIMEOUT) || 30000,
+//   headers: {
+//     'Content-Type': 'application/json',
+//     'Accept': 'application/json',
+//   },
+//   withCredentials: true, // Pour les cookies
+// });
+
+// /**
+//  * Request Interceptor
+//  * Ajoute automatiquement le token et le tenant ID
+//  */
+// apiClient.interceptors.request.use(
+//   async (config) => {
+//     // Ajouter le token d'authentification
+//     const token = getAuthToken();
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+
+//     // Ajouter le Tenant ID
+//     const tenantId = getTenantId();
+//     if (tenantId) {
+//       config.headers['X-Tenant-Id'] = tenantId;
+//     }
+
+//     // Ajouter un request ID pour le tracking
+//     config.headers['X-Request-Id'] = generateRequestId();
+
+//     // Log en développement
+//     if (process.env.NODE_ENV === 'development') {
+//       console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`, {
+//         headers: config.headers,
+//         data: config.data,
+//       });
+//     }
+
+//     return config;
+//   },
+//   (error) => {
+//     console.error('[API Request Error]', error);
+//     return Promise.reject(error);
+//   }
+// );
+
+// /**
+//  * Response Interceptor
+//  * Gère automatiquement le refresh token et les erreurs
+//  */
+// apiClient.interceptors.response.use(
+//   (response: AxiosResponse) => {
+//     // Log en développement
+//     if (process.env.NODE_ENV === 'development') {
+//       console.log(`[API Response] ${response.config.method?.toUpperCase()} ${response.config.url}`, {
+//         status: response.status,
+//         data: response.data,
+//       });
+//     }
+
+//     return response;
+//   },
+//   async (error: AxiosError) => {
+//     const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
+
+//     // Gestion du 401 (Unauthorized) - Tentative de refresh token
+//     if (error.response?.status === 401 && !originalRequest._retry) {
+//       originalRequest._retry = true;
+
+//       try {
+//         const newToken = await refreshToken();
+
+//         if (newToken && originalRequest.headers) {
+//           originalRequest.headers.Authorization = `Bearer ${newToken}`;
+//           return apiClient(originalRequest);
+//         }
+//       } catch (refreshError) {
+//         // Impossible de rafraîchir le token
+//         clearTokens();
+
+//         // Redirect vers login (côté client uniquement)
+//         if (typeof window !== 'undefined') {
+//           window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+//         }
+
+//         return Promise.reject(refreshError);
+//       }
+//     }
+
+//     // Gestion du 403 (Forbidden)
+//     if (error.response?.status === 403) {
+//       console.error('[API] Accès refusé:', error.response.data);
+
+//       if (typeof window !== 'undefined') {
+//         // Afficher un message d'erreur
+//         // toast.error('Vous n\'avez pas les permissions nécessaires');
+//       }
+//     }
+
+//     // Gestion du 404 (Not Found)
+//     if (error.response?.status === 404) {
+//       console.error('[API] Ressource non trouvée:', error.config?.url);
+//     }
+
+//     // Gestion du 500 (Server Error)
+//     if (error.response?.status === 500) {
+//       console.error('[API] Erreur serveur:', error.response.data);
+
+//       if (typeof window !== 'undefined') {
+//         // toast.error('Une erreur serveur est survenue');
+//       }
+//     }
+
+//     // Log de l'erreur
+//     console.error('[API Error]', {
+//       url: error.config?.url,
+//       method: error.config?.method,
+//       status: error.response?.status,
+//       message: error.message,
+//       data: error.response?.data,
+//     });
+
+//     return Promise.reject(error);
+//   }
+// );
 
 /**
  * Génère un ID unique pour chaque requête
@@ -201,7 +340,7 @@ export async function downloadFile(
   link.href = window.URL.createObjectURL(blob);
   link.download = filename;
   link.click();
-  
+
   // Nettoyer
   window.URL.revokeObjectURL(link.href);
 }
