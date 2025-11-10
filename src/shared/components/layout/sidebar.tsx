@@ -19,15 +19,15 @@ import {
 import { cn } from '@/shared/lib/utils/cn';
 import { Button } from '@/shared/components/ui/button';
 import { ScrollArea } from '@/shared/components/shadcnui/scroll-area';
-import { Separator } from '@/shared/components/ui/separator';
 import { useUIStore } from '@/store/ui.store';
 import { useIsMobile } from '@/shared/hooks/use-media-query';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/components/shadcnui/tooltip';
+import { useTenant } from '@/shared/hooks/use-tenant';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Interventions', href: '/work-orders', icon: Wrench },
-  { name: 'Équipements', href: '/assets', icon: Package },
+  { name: 'Équipements', href: '/property-groups', icon: Package },
   { name: 'Maintenances', href: '/maintenance', icon: Calendar },
   { name: 'Contrats', href: '/contracts', icon: FileText },
   { name: 'Stock', href: '/inventory', icon: BoxIcon },
@@ -40,6 +40,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const { sidebarCollapsed, toggleSidebarCollapsed, sidebarOpen, setSidebarOpen } = useUIStore();
   const isMobile = useIsMobile();
+  const { tenant } = useTenant();
 
   const isActive = (href: string) => {
     if (href === '/dashboard') {
@@ -81,7 +82,7 @@ export function Sidebar() {
                 </div>
               </div>
               <div>
-                <h1 className="text-lg font-bold text-sidebar-foreground">GMAO Pro</h1>
+                <h1 className="text-lg font-bold text-sidebar-foreground">{tenant?.name}</h1>
                 <p className="text-xs text-sidebar-foreground/60">Maintenance</p>
               </div>
             </Link>
@@ -113,7 +114,7 @@ export function Sidebar() {
                     {!active && (
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     )}
-                    
+
                     {/* Icon with animation */}
                     <div className={cn(
                       'relative z-10 transition-transform duration-200',
@@ -121,12 +122,12 @@ export function Sidebar() {
                     )}>
                       <Icon className="h-5 w-5 flex-shrink-0" />
                     </div>
-                    
+
                     {/* Label */}
                     {!sidebarCollapsed && (
                       <span className="relative z-10">{item.name}</span>
                     )}
-                    
+
                     {/* Active indicator */}
                     {active && !sidebarCollapsed && (
                       <div className="ml-auto h-2 w-2 rounded-full bg-white/80 animate-pulse"></div>

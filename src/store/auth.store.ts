@@ -1,3 +1,5 @@
+import { clearTokens, setTokens } from '@/shared/lib/auth/token-manager';
+import { Tenant } from '@/shared/types/tenant.types';
 import { User } from '@/shared/types/user.types';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
@@ -6,11 +8,14 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  tenant: Tenant | null;
 }
 
 interface AuthActions {
   setUser: (user: User | null) => void;
+  setToken: (token: string, refreshToken: string) => void;
   setLoading: (loading: boolean) => void;
+  setTenant: (tenant: Tenant | null) => void;
   logout: () => void;
 }
 
@@ -26,24 +31,39 @@ export const useAuthStore = create<AuthStore>()(
       user: null,
       isAuthenticated: false,
       isLoading: true,
-
+      tenant: null,
+      setToken(token, refreshToken) {
+        setTokens(token, refreshToken);
+      },
       // Actions
-      setUser: (user) =>
-        set({
-          user,
-          isAuthenticated: !!user,
-          isLoading: false,
-        }),
+      setUser: (user) => {
+          set({
+            user,
+            isAuthenticated: !!user,
+            isLoading: false,
+          });
+          console.log("FROM SET USER - UseAuthStore", user);
+      }
+      ,
 
       setLoading: (loading) =>
         set({ isLoading: loading }),
 
-      logout: () =>
+      setTenant(tenant) {
+        set({
+          tenant: tenant
+        })
+      },
+
+      logout: () => {
         set({
           user: null,
           isAuthenticated: false,
           isLoading: false,
-        }),
+          tenant: null
+        });
+        clearTokens();
+      },
     }),
     {
       name: 'auth-storage',

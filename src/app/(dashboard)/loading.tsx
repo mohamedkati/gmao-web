@@ -1,3 +1,5 @@
+import { LoadingOverlay } from "@/shared/components";
+
 export default function loading() {
-    return <>laoding...</>
+    return <LoadingOverlay message="Loading page ..." />
 }

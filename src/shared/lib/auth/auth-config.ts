@@ -6,10 +6,11 @@
 export const authConfig = {
   // Pages
   pages: {
-    signIn: '/login',
-    signOut: '/logout',
+    signIn: '/auth/login',
+    signOut: '/auth/logout',
     error: '/auth/error',
     verifyRequest: '/auth/verify-request',
+    me: '/auth/account/me',
     newUser: '/dashboard', // Redirect après inscription
   },
 
@@ -32,7 +33,7 @@ export const authConfig = {
       const user = _user;
       const acc = _account;
       const profile = _profile;
-      console.log(user,acc,profile);
+      console.log(user, acc, profile);
       return true;
     },
 
@@ -75,7 +76,7 @@ export const authConfig = {
       console.log('[Auth] User signed in:', user.email);
     },
     async signOut({ token }: any) {
-      console.log('[Auth] User signed out',token);
+      console.log('[Auth] User signed out', token);
     },
   },
 

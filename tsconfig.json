@@ -42,7 +42,8 @@
       "@/components/*": ["./src/shared/components/*"],
       "@/config/*": ["./src/shared/config/*"],
       "@/utils/*": ["./src/shared/lib/utils/*"],
-      "@/styles/*":["./src/shared/styles/*"]
+      "@/styles/*":["./src/shared/styles/*"],
+      "@/applib/*" : ["./src/lib/*"]
     },
 
     // Language and Environment

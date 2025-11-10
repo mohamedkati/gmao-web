@@ -102,13 +102,16 @@ export function isTimeoutError(error: unknown): boolean {
 /**
  * Vérifie si une erreur est une erreur de validation
  */
-export function isValidationError(error: unknown): boolean {
-  if (error instanceof AxiosError) {
-    return error.response?.status === 400 && !!error.response.data?.errors;
-  }
-  return false;
-}
+// export function isValidationError(error: unknown): boolean {
+//   if (error instanceof AxiosError) {
+//     return error.response?.status === 400 && !!error.response.data?.errors;
+//   }
+//   return false;
+// }
 
+export function isValidationError(response: any): boolean {
+  return 'isValidationError' in response;
+}
 /**
  * Classe d'erreur personnalisée pour l'API
  */

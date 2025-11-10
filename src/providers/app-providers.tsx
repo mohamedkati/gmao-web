@@ -9,6 +9,8 @@ import { TenantProvider } from './tenant-provider';
 import { AuthProvider } from './auth-provider';
 import { ToastProvider } from './toast-provider';
 import type { Tenant } from '@/shared/types/tenant.types';
+import { Toaster } from '@/shared/components/shadcnui/toaster';
+
 // import { SignalRProvider } from '@/shared/lib/realtime/signalr-context';
 
 interface AppProvidersProps {
@@ -20,22 +22,24 @@ interface AppProvidersProps {
  * Provider racine qui combine tous les providers de l'application
  */
 export function AppProviders({ children, initialTenant }: AppProvidersProps) {
-  return (
 
+  return (
     <QueryClientProvider client={queryClient}>
-      <TenantProvider initialTenant={initialTenant}>
-        <AuthProvider>
+      <AuthProvider>
+        <TenantProvider initialTenant={initialTenant}>
           {/* <SignalRProvider autoConnect={true}> */}
-            <ToastProvider />
-            {children}
+          {/* <ToastProvider /> */}
+          <Toaster />
+          {children}
           {/* </SignalRProvider> */}
-        </AuthProvider>
-      </TenantProvider>
+        </TenantProvider>
+      </AuthProvider>
 
       {/* DevTools uniquement en développement */}
       {process.env.NODE_ENV === 'development' && (
         <ReactQueryDevtools initialIsOpen={false} />
       )}
     </QueryClientProvider>
-  );
+
+  )
 }

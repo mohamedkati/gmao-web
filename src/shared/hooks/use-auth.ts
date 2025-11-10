@@ -9,14 +9,27 @@ import { User } from '../types/user.types';
  * Hook pour gérer l'authentification
  */
 export function useAuth() {
-    const { user, isAuthenticated, setUser, logout: storeLogout } = useAuthStore();
+    const { user, isAuthenticated, setUser, logout: storeLogout, setToken } = useAuthStore();
 
     const login = useCallback((user: User) => {
-        console.log('login - useAuthHook - @shared/hooks ', user);
-
-        setUser(user); // TODO - GMAO
+        setUser(user);
     }, [setUser]);
 
+    const authenticate = useCallback((token: string, refreshToken: string) => {
+        // setLoading(true);
+        setToken(token, refreshToken);
+    }, [setToken]);
+    // const getCurrentUser = useCallback(() => {
+    //     // AuthService.getCurrentUserByToken()
+    //     //     .then(res => res.data)
+    //     //     .then((res: ApiResponse<AuthUserTenant>) => {
+    //     //         setUser(res.data.user);
+    //     //         setTenant(res.data.tenant);// TODO just one must be set. because user is not going to be user and tenant at the same time. mohim, to see this after.
+    //     //     })
+    //     //     .catch(err => {
+    //     //         console.log(err, "FROM useAuth(), GetCurrentUser mathod");
+    //     //     });
+    // }, []);
     const logout = useCallback(async () => {
         storeLogout();
         await logoutUtil();
@@ -34,5 +47,7 @@ export function useAuth() {
         login,
         logout,
         updateUser,
+        authenticate,
+        // getCurrentUser,
     };
 }

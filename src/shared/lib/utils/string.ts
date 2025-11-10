@@ -56,6 +56,7 @@ export function slugify(str: string): string {
  * Génère des initiales depuis un nom
  */
 export function getInitials(name: string): string {
+  if (!name) return '';
   return name
     .split(' ')
     .map((n) => n[0])
@@ -93,4 +94,18 @@ export function escapeHtml(str: string): string {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+}
+
+export function formatFieldName(field: string): string {
+  if (!field.includes(".")) return field;
+
+  let pos = field.indexOf(".");
+
+  while (pos !== -1) {
+    let str = field.substring(pos + 1);
+    field = field.substring(0, pos+1) + str.charAt(0).toLowerCase() + str.slice(1);
+    pos = field.indexOf(".", pos + 1);
+  }
+
+  return field;
 }

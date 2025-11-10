@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, Menu, Search } from 'lucide-react';
+import { Menu, Search } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import {
@@ -12,10 +12,9 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
-import { Badge } from '@/shared/components/ui/badge';
 import { useUIStore } from '@/store/ui.store';
 import { useAuth } from '@/shared/hooks/use-auth';
-import { useNotificationsStore } from '@/store/notification.store';
+// import { useNotificationsStore } from '@/store/notification.store';
 import { getInitials } from '@/shared/lib/utils/string';
 import { ThemeToggle } from './theme-toggle';
 import { NotificationsPopover } from './notifications-popover';
@@ -25,7 +24,7 @@ import { cn } from '@/shared/lib/utils/cn';
 export function Header() {
   const { setSidebarOpen } = useUIStore();
   const { user, logout } = useAuth();
-  const { unreadCount } = useNotificationsStore();
+  // const { unreadCount } = useNotificationsStore();
   const isMobile = useIsMobile();
 
   return (

@@ -1,4 +1,4 @@
-import { Wrench, Package, Calendar, CheckCircle, AlertTriangle, TrendingUp, Users } from 'lucide-react';
+import { Wrench, Calendar, CheckCircle, AlertTriangle, TrendingUp, Users } from 'lucide-react';
 import { PageHeader } from '@/shared/components/layout/page-header';
 import { Section } from '@/shared/components/layout/section';
 import { SplitView } from '@/shared/components/layout/split-view';

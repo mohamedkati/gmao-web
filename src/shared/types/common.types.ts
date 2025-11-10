@@ -16,10 +16,15 @@ export interface PaginatedResponse<T> {
  * Type pour les réponses API standard
  */
 export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
+  isSucceeded: boolean;
+  data: T;
   message?: string;
-  errors?: Record<string, string[]>;
+  errorMessage?: string;
+}
+
+export interface ValidationApiResponse extends ApiResponse<string> {
+  isValidationError: boolean;
+  errors: Record<string, string[]>;
 }
 
 /**

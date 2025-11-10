@@ -2,6 +2,7 @@
 import { Role } from '../lib/permissions/role-definitions';
 import { Permission } from '../lib/permissions/permissions.constants';
 import { User } from './user.types';
+import { Tenant } from './tenant.types';
 
 
 
@@ -30,10 +31,14 @@ export interface RegisterData {
  * Réponse de l'authentification
  */
 export interface AuthResponse {
-  user: User;
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
+  accountConfirmed: boolean;
+  fullName: string;
+  id: string;
+  tenantId: string;
+  userName: string;
+  token: string;
+  refreshToken?: string;
+  expiresIn?: number;
 }
 
 /**
@@ -55,4 +60,9 @@ export interface JwtPayload {
   tenantId: string;
   iat: number; // Issued at
   exp: number; // Expiration
+}
+
+export interface AuthUserTenant {
+  user: User,
+  tenant: Tenant
 }

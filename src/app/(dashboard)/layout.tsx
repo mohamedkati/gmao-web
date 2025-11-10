@@ -14,7 +14,6 @@ interface AppLayoutProps {
 export default function AppLayout({ children }: AppLayoutProps) {
   const { sidebarCollapsed, sidebarOpen, setSidebarOpen } = useUIStore();
   const isMobile = useIsMobile();
-
   return (
     <div className="h-screen flex overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
       {/* Sidebar */}

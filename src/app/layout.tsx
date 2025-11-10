@@ -40,7 +40,6 @@ export default async function RootLayout({
 }) {
   // Récupérer le tenant côté serveur
   // const tenant = await getTenantFromServer();
-
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={`${manrope.variable} font-sans`} suppressHydrationWarning>
@@ -51,7 +50,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <AppProviders initialTenant={undefined}>
-              {children}
+            {children}
           </AppProviders>
         </ThemeProvider>
 

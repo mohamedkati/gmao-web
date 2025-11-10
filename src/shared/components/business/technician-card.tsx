@@ -1,4 +1,4 @@
-import { User, Phone, Mail, MapPin, Wrench, Calendar } from 'lucide-react';
+import {Phone, Mail, MapPin, Wrench, Calendar } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader } from '@/shared/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 import { Badge } from '@/shared/components/ui/badge';

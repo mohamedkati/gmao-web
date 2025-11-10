@@ -9,15 +9,11 @@ const apiRoutes = ['/api'];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  console.log(request);
-  console.log(apiRoutes);
-  console.log(publicRoutes);
-  
+
   // Ignorer les routes API
   if (apiRoutes.some((route) => pathname.startsWith(route))) {
     return NextResponse.next();
   }
-
   // Ignorer les fichiers statiques
   if (
     pathname.startsWith('/_next') ||
@@ -34,20 +30,19 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('auth-token')?.value;
 
   // Redirect vers login si pas authentifié sur route privée
-  // if (!isPublicRoute && !token) {
-  //   const loginUrl = new URL('/login', request.url);
-  //   loginUrl.searchParams.set('redirect', pathname);
-  //   return NextResponse.redirect(loginUrl);
-  // }
+  if (!isPublicRoute && !token) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(loginUrl);
+  }
 
   // Redirect vers dashboard si authentifié sur route publique
-  // if (isPublicRoute && token && pathname !== '/') {
-  //   return NextResponse.redirect(new URL('/dashboard', request.url));
-  // }
+  if (isPublicRoute && token && pathname !== '/') {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
 
   // Créer la réponse
   const response = NextResponse.next();
-
   // Ajouter les headers custom
   // if (tenant) {
   //   response.headers.set('X-Tenant-Id', tenant.id);

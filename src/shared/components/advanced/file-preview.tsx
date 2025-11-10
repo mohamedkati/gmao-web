@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText, Image as ImageIcon, File, Download, X } from 'lucide-react';
+import { FileText, Image as ImageIcon, File, Download} from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 import { Button } from '@/shared/components/ui/button';
 

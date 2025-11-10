@@ -64,11 +64,11 @@ export function EquipmentStatus({
   const config = statusConfig[status];
   const Icon = config.icon;
 
-  const getHealthColor = () => {
-    if (health >= 80) return 'bg-green-500';
-    if (health >= 60) return 'bg-yellow-500';
-    return 'bg-red-500';
-  };
+  // const getHealthColor = () => {
+  //   if (health >= 80) return 'bg-green-500';
+  //   if (health >= 60) return 'bg-yellow-500';
+  //   return 'bg-red-500';
+  // };
 
   const getMetricColor = (metricStatus?: string) => {
     if (!metricStatus) return 'text-foreground';

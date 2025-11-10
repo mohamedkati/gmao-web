@@ -23,7 +23,7 @@ interface ImageGalleryProps {
  * Galerie d'images avec lightbox
  */
 export function ImageGallery({ images, initialIndex = 0, className }: ImageGalleryProps) {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(initialIndex);
   const [zoom, setZoom] = useState(1);
 
   const openLightbox = (index: number) => {

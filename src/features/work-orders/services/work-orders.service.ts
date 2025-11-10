@@ -1,4 +1,4 @@
-import apiClient from '@/shared/lib/api/api-client';
+import {apiClient} from '@/shared/lib/api/api-client';
 import { API_ENDPOINTS } from '@/shared/lib/constants/api.constants';
 import {
     type WorkOrder,
