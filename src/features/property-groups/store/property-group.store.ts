@@ -5,7 +5,6 @@ interface PropertyGroupState {
   // Data
   propertyGroups: PropertyGroup[];
   selectedPropertyGroup: PropertyGroup | null;
-
   // UI State
   isDrawerOpen: boolean;
   drawerMode: 'create' | 'edit' | 'view' | null;
@@ -67,7 +66,6 @@ export const usePropertyGroupStore = create<PropertyGroupState>((set) => ({
     isContactDrawerOpen: true,
     selectedContactIndex: contactIndex ?? null
   }),
-
   closeContactDrawer: () => set({
     isContactDrawerOpen: false,
     selectedContactIndex: null

@@ -38,7 +38,6 @@ export const propertyGroupFormSchema = z.object({
   description: z.string().optional(),
   type: z.nativeEnum(PropertyGroupType),
   status: z.nativeEnum(PropertyGroupStatus),
-
   // Legal Info
   legalName: z.string().optional(),
   siren: z.string().regex(/^\d{9}$/, 'Le SIREN doit contenir 9 chiffres').optional().or(z.literal('')),
@@ -55,7 +54,6 @@ export const propertyGroupFormSchema = z.object({
   mainContactEmail: z.string().email('Email invalide').optional().or(z.literal('')),
   mainContactPhone: z.string().optional(),
   mainContactMobile: z.string().optional(),
-
   // Accounting Contact
   accountingContactName: z.string().optional(),
   accountingContactEmail: z.string().email('Email invalide').optional().or(z.literal('')),
@@ -75,7 +73,6 @@ export const propertyGroupFormSchema = z.object({
   frameworkContractEndDate: z.string().optional(),
   frameworkContractReference: z.string().optional(),
   autoRenewalFrameworkContract: z.boolean().default(false),
-
   // Notes
   internalNotes: z.string().optional(),
   commercialNotes: z.string().optional(),

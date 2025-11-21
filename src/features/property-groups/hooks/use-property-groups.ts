@@ -29,7 +29,6 @@ export const usePropertyGroup = (id: string) => {
     queryFn: () => propertyGroupService.getById(id),
     enabled: !!id,
   });
-
 };
 
 // Get property group contacts
