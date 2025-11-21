@@ -338,7 +338,7 @@ export default function ThemeDemoPage() {
           </CardContent>
         </Card>
 
-        {/* Color Palette */}
+
         <Card>
           <CardHeader>
             <CardTitle>Palette de Couleurs</CardTitle>

@@ -22,6 +22,8 @@ const kpiData = {
   availableTechnicians: 12,
 };
 
+
+
 const monthlyWorkOrders = [
   { month: 'Jan', value: 45 },
   { month: 'Fév', value: 52 },
