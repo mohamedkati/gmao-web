@@ -1,7 +1,11 @@
 // ==================================================
-// 🎨 THEME SWITCHER COMPONENT
+// 🎨 THEME SWITCHER - INTÉGRÉ AVEC SIDEBAR
 // ==================================================
-// Fichier : components/theme-switcher.tsx
+// Fichier : features/settings/components/theme-switcher-dialog.tsx
+//
+// ✅ Utilise shadcn/ui Dialog
+// ✅ Prévisualisation des thèmes
+// ✅ S'intègre dans la sidebar
 
 'use client';
 
@@ -20,7 +24,15 @@ import { Button } from '@/components/ui/button';
 import { Palette, Check } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 
-export const ThemeSwitcher = () => {
+interface ThemeSwitcherDialogProps {
+  trigger?: React.ReactNode;
+  compact?: boolean;
+}
+
+export const ThemeSwitcher = ({
+  trigger,
+  compact = false
+}: ThemeSwitcherDialogProps) => {
   const { currentTheme, setTheme } = useTheme();
   const [open, setOpen] = useState(false);
 
@@ -29,16 +41,24 @@ export const ThemeSwitcher = () => {
     setOpen(false);
   };
 
+  const defaultTrigger = compact ? (
+    <button
+      className="w-full flex items-center gap-3 px-4 py-2 text-sm rounded-lg transition-colors"
+    >
+      <Palette className="w-4 h-4" />
+      <span>Changer de thème</span>
+    </button>
+  ) : (
+    <Button variant="outline" className="gap-2">
+      <Palette className="w-4 h-4" />
+      Thème
+    </Button>
+  );
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="gap-2"
-        >
-          <Palette className="w-4 h-4" />
-          Thème
-        </Button>
+        {trigger || defaultTrigger}
       </DialogTrigger>
 
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -58,7 +78,7 @@ export const ThemeSwitcher = () => {
                 key={key}
                 onClick={() => handleThemeChange(key as ThemeKey)}
                 className={cn(
-                  "relative group p-4 rounded-xl border-2 transition-all",
+                  "relative group p-4 rounded-xl border-2 transition-all text-left",
                   "hover:shadow-lg hover:scale-[1.02]",
                   isActive
                     ? "border-current shadow-xl"
@@ -140,14 +160,6 @@ export const ThemeSwitcher = () => {
                     />
                   </div>
                 </div>
-
-                {/* Gradient preview */}
-                <div
-                  className={cn(
-                    "mt-3 h-2 rounded-full bg-gradient-to-r",
-                    theme.gradient
-                  )}
-                />
               </button>
             );
           })}
@@ -158,84 +170,6 @@ export const ThemeSwitcher = () => {
           <p className="text-sm text-slate-600 dark:text-slate-400">
             Thème actuel : <strong>{themes[currentTheme].name}</strong>
           </p>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
-// ==================================================
-// 🎯 MINI VERSION - Pour la sidebar
-// ==================================================
-
-export const ThemeSwitcherCompact = () => {
-  const { currentTheme, setTheme } = useTheme();
-  const [open, setOpen] = useState(false);
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <button
-          className="w-full flex items-center gap-3 px-4 py-2 text-sm text-slate-300 hover:bg-white/10 rounded-lg transition-colors"
-          title="Changer de thème"
-        >
-          <Palette className="w-4 h-4" />
-          <span>Thème</span>
-        </button>
-      </DialogTrigger>
-
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>Choisir un Thème</DialogTitle>
-        </DialogHeader>
-
-        <div className="grid grid-cols-2 gap-3 mt-4">
-          {getAllThemes().map(([key, theme]) => {
-            const isActive = currentTheme === key;
-
-            return (
-              <button
-                key={key}
-                onClick={() => {
-                  setTheme(key as ThemeKey);
-                  setOpen(false);
-                }}
-                className={cn(
-                  "p-3 rounded-lg border-2 transition-all hover:scale-105",
-                  isActive
-                    ? "border-current shadow-lg"
-                    : "border-slate-200 dark:border-slate-700"
-                )}
-                style={{
-                  borderColor: isActive ? theme.colors.primary : undefined,
-                }}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-sm">{theme.name}</span>
-                  {isActive && (
-                    <Check
-                      className="w-4 h-4"
-                      style={{ color: theme.colors.primary }}
-                    />
-                  )}
-                </div>
-                <div className="flex gap-1">
-                  <div
-                    className="flex-1 h-3 rounded"
-                    style={{ backgroundColor: theme.colors.primary }}
-                  />
-                  <div
-                    className="flex-1 h-3 rounded"
-                    style={{ backgroundColor: theme.colors.sidebarBg }}
-                  />
-                  <div
-                    className="flex-1 h-3 rounded"
-                    style={{ backgroundColor: theme.colors.accent }}
-                  />
-                </div>
-              </button>
-            );
-          })}
         </div>
       </DialogContent>
     </Dialog>

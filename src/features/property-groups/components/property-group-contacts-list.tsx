@@ -22,7 +22,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/shared/components/shadcnui/alert-dialog";
-import { Plus, MoreVertical, Mail, Phone, Edit, Trash, Star, Smartphone } from "lucide-react";
+import { Plus, MoreVertical, Mail, Phone, Edit, Trash, Star, Smartphone, Users, CheckCircle2 } from "lucide-react";
 import { PropertyGroupContact } from "../types/property-group.types";
 import {
     usePropertyGroupContacts,
@@ -34,6 +34,8 @@ import {
     preferredContactMethodLabels,
 } from "../utils/property-groups.utils";
 import { PropertyGroupContactDrawer } from "./property-group-contact-drawer";
+import { Separator } from "@/shared/components/ui/separator";
+import Link from "next/link";
 
 interface PropertyGroupContactsListProps {
     propertyGroupId: string;
@@ -97,143 +99,135 @@ export function PropertyGroupContactsList({ propertyGroupId }: PropertyGroupCont
 
                 {!contacts || contacts.length === 0 ? (
                     <Card>
-                        <CardContent className="flex flex-col items-center justify-center py-10">
-                            <p className="text-muted-foreground mb-4">
-                                Aucun contact enregistré pour ce groupe
+                        <CardContent className="flex flex-col items-center justify-center py-12">
+                            <Users className="h-12 w-12 text-muted-foreground mb-4" />
+                            <p className="text-muted-foreground mb-2">Aucun contact enregistré</p>
+                            <p className="text-sm text-muted-foreground">
+                                Ajoutez des contacts pour faciliter la communication
                             </p>
-                            <Button onClick={() => openContactDrawer()}>
-                                <Plus className="mr-2 h-4 w-4" />
-                                Ajouter le premier contact
-                            </Button>
                         </CardContent>
                     </Card>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {contacts.map((contact, index) => (
-                            <Card key={contact.id || index} className="relative">
-                                {contact.isPrimary && (
-                                    <div className="absolute top-3 right-3">
-                                        <Badge variant="default" className="gap-1">
-                                            <Star className="h-3 w-3 fill-current" />
-                                            Principal
-                                        </Badge>
-                                    </div>
-                                )}
-
-                                <CardHeader>
-                                    <div className="flex items-start justify-between">
-                                        <div className="flex-1 pr-8">
-                                            <CardTitle className="text-base">
-                                                {contact.firstName} {contact.lastName}
-                                            </CardTitle>
-                                            <CardDescription className="space-y-1 mt-1">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        {
+                            contacts.map((contact, index) => (
+                                <Card key={contact.id}>
+                                    <CardHeader>
+                                        <div className="flex items-start justify-between">
+                                            <div className="flex-1 pr-8">
+                                                <CardTitle className="text-base">
+                                                    {contact.firstName} {contact.lastName}
+                                                </CardTitle>
                                                 {contact.position && (
-                                                    <span className="block">{contact.position}</span>
+                                                    <CardDescription>{contact.position}</CardDescription>
                                                 )}
-                                                <Badge variant="outline" className="text-xs">
-                                                    {contactRoleLabels[contact.role]}
+                                            </div>
+                                            {contact.isPrimary && (
+                                                <Badge variant="default" className="gap-1">
+                                                    <CheckCircle2 className="h-3 w-3" />
+                                                    Principal
                                                 </Badge>
-                                            </CardDescription>
+                                            )}
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon"
+                                                        className="h-6 w-6 pl-0" style={{ marginRight: -14, marginLeft: 3 }}
+                                                    >
+                                                        <MoreVertical className="h-3 w-3" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                    <DropdownMenuItem onClick={() => handleEdit(contact, index)}>
+                                                        <Edit className="mr-2 h-4 w-4" />
+                                                        Modifier
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem
+                                                        onClick={() => handleDelete(contact)}
+                                                        className="text-destructive"
+                                                    >
+                                                        <Trash className="mr-2 h-4 w-4" />
+                                                        Supprimer
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </div>
-
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" size="icon" className="h-8 w-8">
-                                                    <MoreVertical className="h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                                <DropdownMenuItem onClick={() => handleEdit(contact, index)}>
-                                                    <Edit className="mr-2 h-4 w-4" />
-                                                    Modifier
-                                                </DropdownMenuItem>
-                                                <DropdownMenuSeparator />
-                                                <DropdownMenuItem
-                                                    onClick={() => handleDelete(contact)}
-                                                    className="text-destructive"
+                                    </CardHeader>
+                                    <CardContent className="space-y-3">
+                                        <div className="flex items-center gap-2">
+                                            <Badge variant="outline" className="text-xs">
+                                                {contactRoleLabels[contact.role]}
+                                            </Badge>
+                                            {contact.department && (
+                                                <span className="text-xs text-muted-foreground">
+                                                    {contact.department}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <Separator />
+                                        <div className="space-y-2">
+                                            <div className="flex items-center gap-2 text-sm">
+                                                <Mail className="h-4 w-4 text-muted-foreground" />
+                                                <Link
+                                                    href={`mailto:${contact.email}`}
+                                                    className="text-primary hover:underline"
                                                 >
-                                                    <Trash className="mr-2 h-4 w-4" />
-                                                    Supprimer
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
-                                </CardHeader>
-
-                                <CardContent className="space-y-3">
-                                    {/* Contact Info */}
-                                    <div className="space-y-2">
-                                        <a
-                                            href={`mailto:${contact.email}`}
-                                            className="flex items-center gap-2 text-sm text-primary hover:underline"
-                                        >
-                                            <Mail className="h-4 w-4 text-muted-foreground" />
-                                            {contact.email}
-                                        </a>
-
-                                        {contact.phone && (
-                                            <a
-                                                href={`tel:${contact.phone}`}
-                                                className="flex items-center gap-2 text-sm text-primary hover:underline"
-                                            >
-                                                <Phone className="h-4 w-4 text-muted-foreground" />
-                                                {contact.phone}
-                                            </a>
-                                        )}
-
-                                        {contact.mobile && (
-                                            <a
-                                                href={`tel:${contact.mobile}`}
-                                                className="flex items-center gap-2 text-sm text-primary hover:underline"
-                                            >
-                                                <Smartphone className="h-4 w-4 text-muted-foreground" />
-                                                {contact.mobile}
-                                            </a>
-                                        )}
-                                    </div>
-
-                                    {/* Department */}
-                                    {contact.department && (
-                                        <div className="text-sm">
-                                            <span className="text-muted-foreground">Service: </span>
-                                            <span>{contact.department}</span>
+                                                    {contact.email}
+                                                </Link>
+                                            </div>
+                                            {contact.phone && (
+                                                <div className="flex items-center gap-2 text-sm">
+                                                    <Phone className="h-4 w-4 text-muted-foreground" />
+                                                    <Link
+                                                        href={`tel:${contact.phone}`}
+                                                        className="text-primary hover:underline"
+                                                    >
+                                                        {contact.phone}
+                                                    </Link>
+                                                </div>
+                                            )}
+                                            {contact.mobile && (
+                                                <div className="flex items-center gap-2 text-sm">
+                                                    <Smartphone className="h-4 w-4 text-muted-foreground" />
+                                                    <Link
+                                                        href={`tel:${contact.mobile}`}
+                                                        className="text-primary hover:underline"
+                                                    >
+                                                        {contact.mobile}
+                                                    </Link>
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
-
-                                    {/* Contact Preferences */}
-                                    <div className="flex flex-wrap gap-2 pt-2">
-                                        {contact.receivesInvoices && (
-                                            <Badge variant="secondary" className="text-xs">
-                                                Factures
-                                            </Badge>
-                                        )}
-                                        {contact.receivesReports && (
-                                            <Badge variant="secondary" className="text-xs">
-                                                Rapports
-                                            </Badge>
-                                        )}
-                                        {contact.receivesAlerts && (
-                                            <Badge variant="secondary" className="text-xs">
-                                                Alertes
-                                            </Badge>
-                                        )}
-                                    </div>
-
-                                    {/* Preferred Contact Method */}
-                                    <div className="text-xs text-muted-foreground">
-                                        Préfère: {preferredContactMethodLabels[contact.preferredContactMethod]}
-                                    </div>
-
-                                    {/* Notes */}
-                                    {contact.notes && (
-                                        <div className="pt-2 border-t">
-                                            <p className="text-xs text-muted-foreground">{contact.notes}</p>
+                                        <div className="flex flex-wrap gap-2 pt-2">
+                                            {contact.receivesInvoices && (
+                                                <Badge variant="secondary" className="text-xs">
+                                                    Factures
+                                                </Badge>
+                                            )}
+                                            {contact.receivesReports && (
+                                                <Badge variant="secondary" className="text-xs">
+                                                    Rapports
+                                                </Badge>
+                                            )}
+                                            {contact.receivesAlerts && (
+                                                <Badge variant="secondary" className="text-xs">
+                                                    Alertes
+                                                </Badge>
+                                            )}
                                         </div>
-                                    )}
-                                </CardContent>
-                            </Card>
-                        ))}
+                                        <div className="text-xs text-muted-foreground">
+                                            Préfère: {preferredContactMethodLabels[contact.preferredContactMethod]}
+                                        </div>
+                                        {contact.notes && (
+                                            <>
+                                                <Separator />
+                                                <p className="text-xs text-muted-foreground">{contact.notes}</p>
+                                            </>
+                                        )}
+                                    </CardContent>
+                                </Card>
+                            ))}
                     </div>
                 )}
             </div>

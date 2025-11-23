@@ -16,6 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/shared/components/shadcnui/alert-dialog";
+import { useRouter } from "next/navigation";
 
 interface PropertyGroupsTableProps {
   data: PropertyGroup[];
@@ -25,7 +26,7 @@ interface PropertyGroupsTableProps {
 export function PropertyGroupsTable({ data, isLoading }: PropertyGroupsTableProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<PropertyGroup | null>(null);
-
+  const router = useRouter();
   const { openDrawer } = usePropertyGroupStore();
   const deleteMutation = useDeletePropertyGroup();
   const updateStatsMutation = useUpdatePropertyGroupStatistics();
@@ -63,10 +64,13 @@ export function PropertyGroupsTable({ data, isLoading }: PropertyGroupsTableProp
   const handleUpdateStatistics = (group: PropertyGroup) => {
     updateStatsMutation.mutate(group.id);
   };
-
+  const handlePageEdit = (group: PropertyGroup) => {
+    router.push(`/property-groups/${group.id}/edit`)
+  }
   const columns = createPropertyGroupColumns({
     onView: handleView,
     onEdit: handleEdit,
+    onPageEdit: handlePageEdit,
     onDelete: handleDelete,
     onManageContacts: handleManageContacts,
     onUpdateStatistics: handleUpdateStatistics,

@@ -1,20 +1,21 @@
-// src/app/(dashboard)/property-groups/page.tsx
 
 "use client";
 
 import { Button } from "@/shared/components/shadcnui/button";
-import { Plus, Download, Upload, RefreshCw } from "lucide-react";
+import { Plus, Download, Upload, RefreshCw, ChevronDown } from "lucide-react";
 import { PropertyGroupsTable } from "@/features/property-groups/components/property-groups-table";
 import { PropertyGroupsFilters } from "@/features/property-groups/components/property-groups-filter";
 import { PropertyGroupStatsCards } from "@/features/property-groups/components/property-group-stats-cards";
 import { PropertyGroupDrawer } from "@/features/property-groups/components/property-group-drawer";
 import { usePropertyGroups } from "@/features/property-groups/hooks/index";
 import { usePropertyGroupStore } from "@/features/property-groups/store/property-group.store";
+import { useRouter } from "next/navigation";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
 
 export default function PropertyGroupsPage() {
   const { openDrawer, filters } = usePropertyGroupStore();
   const { data: propertyGroups, isLoading, refetch } = usePropertyGroups(filters);
-
+const router = useRouter();
   const handleExport = () => {
     // TODO: Implement export functionality
     console.log("Export data");
@@ -49,24 +50,49 @@ export default function PropertyGroupsPage() {
             <Upload className="mr-2 h-4 w-4" />
             Importer
           </Button>
-          <Button onClick={() => openDrawer("create")}>
+          {/* <Button onClick={() => openDrawer("create")}>
             <Plus className="mr-2 h-4 w-4" />
             Nouveau groupe
-          </Button>
+          </Button> */}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                Nouveau groupe
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => openDrawer("create")}>
+                <span className="font-medium">Mode Drawer</span>
+                <span className="text-xs text-muted-foreground block">
+                  Création rapide (panneau latéral)
+                </span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/property-groups/new")}>
+                <span className="font-medium">Mode Page</span>
+                <span className="text-xs text-muted-foreground block">
+                  Création complète (page dédiée)
+                </span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <PropertyGroupStatsCards />
+      < PropertyGroupStatsCards />
 
       {/* Filters */}
-      <PropertyGroupsFilters />
+      < PropertyGroupsFilters />
 
       {/* Table */}
-      <PropertyGroupsTable data={propertyGroups || []} isLoading={isLoading} />
+      < PropertyGroupsTable data={propertyGroups || []
+      } isLoading={isLoading} />
 
       {/* Drawer */}
-      <PropertyGroupDrawer />
-    </div>
+      < PropertyGroupDrawer />
+    </div >
   );
 }

@@ -134,7 +134,6 @@
     --chart-4: 280.1 65.1% 60.2%;
     --chart-5: 340.5 75.2% 57.5%;
 
-    
     /* Sidebar - Plus foncé en dark mode */
     /* --sidebar: 222.2 84% 3.9%;
     --sidebar-foreground: 210 40% 98%;
@@ -333,4 +332,94 @@
   background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--primary) / 0.5));
   background-size: 200% 200%;
   animation: gradient-rotate 3s ease infinite;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --radius: 0.5rem;
+
+    /* Destructive reste rouge par défaut */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+  }
+}
+
+/* ✅ Inputs avec border coloré au focus */
+@layer components {
+  /* Tous les inputs */
+  input[type='text']:focus,
+  input[type='email']:focus,
+  input[type='password']:focus,
+  input[type='number']:focus,
+  input[type='search']:focus,
+  input[type='tel']:focus,
+  input[type='url']:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: hsl(var(--color-primary));
+    ring: 2px;
+    ring-color: hsl(var(--color-primary) / 0.2);
+  }
+
+  /* shadcn/ui Input component */
+  .focus-visible\:ring-ring:focus-visible {
+    --tw-ring-color: hsl(var(--color-primary));
+    border-color: hsl(var(--color-primary));
+  }
+
+  /* Classe utilitaire pour focus personnalisé */
+  .input-focus:focus {
+    border-color: hsl(var(--color-primary));
+    box-shadow: 0 0 0 3px hsl(var(--color-primary) / 0.1);
+  }
+  .text-primary-50 {
+    color: hsl(var(--color-primary), 0.1, 0.5);
+  }
+
+  .light .bg-body {
+    /* background-color: hsl(0, 0%, 97%); */
+    background: linear-gradient(to bottom, hsl(var(--muted) / 0.3), hsl(0, 0%, 97%));
+    /* background: linear-gradient(to bottom, hsl(var(--muted) / 0.3), hsl(var(--background))); */
+  }
+  .light .bg-white-no-dark {
+    background-color: #fff;
+  }
+  .dark .bg-body {
+    background-color: hsl(var(--background));
+  }
+}
+
+/* ✅ Supprimer tous les gradients */
+@layer utilities {
+  .no-gradient {
+    background-image: none !important;
+  }
 }

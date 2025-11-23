@@ -62,7 +62,6 @@ export const PropertyGroupDrawer = memo(function PropertyGroupDrawer() {
 
   const { data: group, isLoading: loadingDetail } = usePropertyGroup(selectedPropertyGroup?.id || ''); // C'est une requette useQuery
 
-  console.log("data",group)
   const handleSubmit = (data: PropertyGroupFormValues) => {
     setValidationErrors(undefined)
     if (data.frameworkContractStartDate === "")

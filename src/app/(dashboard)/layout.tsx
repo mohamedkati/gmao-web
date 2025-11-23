@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/header';
 import { useUIStore } from '@/store/ui.store';
 import { cn } from '@/shared/lib/utils/cn';
 import { useIsMobile } from '@/shared/hooks/use-media-query';
+import { useTheme } from '@/providers/theme-provider';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -13,11 +14,14 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   const { sidebarCollapsed, sidebarOpen, setSidebarOpen } = useUIStore();
+  const {theme} = useTheme();
   const isMobile = useIsMobile();
   return (
-    <div className="h-screen flex overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
+    // <div className="h-screen flex overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="h-screen flex overflow-hidden  via-background to-muted/20 bg-body">
       {/* Sidebar */}
       <Sidebar />
+
 
       {/* Mobile overlay */}
       {isMobile && sidebarOpen && (
@@ -36,12 +40,13 @@ export default function AppLayout({ children }: AppLayoutProps) {
       >
         {/* Header */}
         <Header />
-
+        {/* <ThemedHeader /> */}
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto">
           {/* Subtle gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none"></div>
-          
+          {/* <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none"></div> */}
+          <div className="absolute inset-0  from-primary/5 via-transparent to-transparent pointer-events-none"></div>
+
           <div className="relative container mx-auto p-6 space-y-6">
             {children}
           </div>

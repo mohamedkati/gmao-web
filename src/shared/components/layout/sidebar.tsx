@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
   BoxIcon,
+  Palette,
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils/cn';
 import { Button } from '@/shared/components/ui/button';
@@ -23,6 +24,8 @@ import { useUIStore } from '@/store/ui.store';
 import { useIsMobile } from '@/shared/hooks/use-media-query';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/components/shadcnui/tooltip';
 import { useTenant } from '@/shared/hooks/use-tenant';
+import { useTheme } from '@/providers/theme-provider';
+import { themes } from '@/applib/themes/themes-config';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -42,32 +45,58 @@ export function Sidebar() {
   const isMobile = useIsMobile();
   const { tenant } = useTenant();
 
+  const { theme, setTheme, currentTheme } = useTheme();
+
   const isActive = (href: string) => {
     if (href === '/dashboard') {
       return pathname === href;
     }
     return pathname.startsWith(href);
   };
-
+  function handleThemeChanging(): void {
+    if (theme.name === themes.emerald.name)
+      setTheme('professional');
+    else if (theme.name === themes.professional.name)
+      setTheme('modern');
+    else if (theme.name === themes.modern.name)
+      setTheme('slate');
+    else if (theme.name === themes.slate.name)
+      setTheme('energetic');
+    else if (theme.name === themes.energetic.name)
+      setTheme('corporate');
+    else if (theme.name === themes.corporate.name)
+      setTheme('tech');
+    else if (theme.name === themes.tech.name)
+      setTheme('emerald');
+  }
   return (
     <>
       <aside
         className={cn(
           'fixed inset-y-0 left-0 z-50 flex flex-col',
-          'bg-sidebar border-r border-sidebar-border',
+          'bg-sidebar border-sidebar-border',
           'transition-all duration-300 ease-in-out',
           sidebarCollapsed ? 'w-20' : 'w-64',
           isMobile && !sidebarOpen && '-translate-x-full',
           isMobile && 'lg:translate-x-0'
         )}
+        style={{
+          backgroundColor: `hsl(${theme.colors.sidebarBg})`,
+           color: `hsl(${theme.colors.sidebarText})`,
+        }}
       >
         {/* Logo */}
         <div
           className={cn(
-            'h-16 flex items-center border-b border-sidebar-border px-4',
+            'h-16 flex items-center border-sidebar-border px-4',
             'bg-gradient-to-r from-sidebar to-sidebar/95',
             sidebarCollapsed ? 'justify-center' : 'justify-between'
           )}
+          style={{
+            color: `hsl(${theme.colors.sidebarText})`,
+            opacity:0.7
+          }}
+
         >
           {sidebarCollapsed ? (
             <div className="p-2 bg-primary/20 rounded-xl backdrop-blur-sm ring-1 ring-primary/30">
@@ -155,7 +184,7 @@ export function Sidebar() {
         </ScrollArea>
 
         {/* Footer */}
-        <div className="border-t border-sidebar-border p-3 space-y-2 bg-sidebar/50 backdrop-blur-sm">
+        <div className="border-sidebar-border p-3 space-y-2 bg-sidebar/50 backdrop-blur-sm">
           {/* Settings */}
           <TooltipProvider delayDuration={0}>
             <Tooltip>
@@ -179,7 +208,25 @@ export function Sidebar() {
               )}
             </Tooltip>
           </TooltipProvider>
-
+          {sidebarOpen && (
+            <button
+              className="w-full flex items-center gap-3 px-4 py-2 rounded-lg mb-3 transition-colors"
+              style={{
+                color: theme.colors.sidebarText,
+                backgroundColor: 'rgba(255, 255, 255, 0.05)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = theme.colors.sidebarHover;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+              }}
+              onClick={handleThemeChanging}
+            >
+              <Palette className="w-4 h-4" />
+              <span>Changer de thème</span>
+            </button>
+          )}
           {/* Collapse Button (Desktop only) */}
           {!isMobile && (
             <Button

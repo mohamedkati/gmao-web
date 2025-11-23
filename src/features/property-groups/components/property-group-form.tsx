@@ -16,6 +16,7 @@ import { LegalInfoStep } from "./form-steps/legal-info-step";
 import { AddressStep } from "./form-steps/basic-step-address";
 import { ContactsStep } from "./form-steps/form-step-contacts";
 import { NotesStep } from "./form-steps/notes-step";
+import { useTheme } from "@/providers/theme-provider";
 
 const STEPS = [
   { id: 1, name: "Informations de base", component: BasicInfoStep },
@@ -41,7 +42,7 @@ export function PropertyGroupForm({
   validationErrors
 }: PropertyGroupFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  console.log("initial data", initialData);
+  const { theme } = useTheme();
   const form = useForm<PropertyGroupFormValues>({
     resolver: zodResolver(propertyGroupFormSchema),
     reValidateMode: "onBlur",
@@ -56,7 +57,7 @@ export function PropertyGroupForm({
       companyRegistrationNumber: initialData?.companyRegistrationNumber || "",
       vatNumber: initialData?.vatNumber || "",
       legalForm: initialData?.legalForm,
-      headquartersAddress: initialData?.headquartersAddress || { city: "", country: '', postalCode: '', street: '',secondAddressLine:'',firstAddressLine:'' },
+      headquartersAddress: initialData?.headquartersAddress || { city: "", country: '', postalCode: '', street: '', secondAddressLine: '', firstAddressLine: '' },
       mainContactName: initialData?.mainContactName || "",
       mainContactPosition: initialData?.mainContactPosition || "",
       mainContactEmail: initialData?.mainContactEmail || "",
@@ -143,14 +144,29 @@ export function PropertyGroupForm({
                 currentStep === step.id
                   ? "bg-primary text-primary-foreground"
                   : currentStep > step.id
-                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                    ? ""
                     : "bg-muted text-muted-foreground hover:bg-muted/80"
               )}
+              // ✅ Style inline pour étape complétée avec couleur du thème
+              style={
+                currentStep > step.id
+                  ? {
+                    backgroundColor: `hsl(${theme.colors.primary} / 0.15)`,
+                    color: `hsl(${theme.colors.primary})`,
+                    // border: `1px solid hsl(${theme.colors.primary} / 0.3)`,
+                  }
+                  : undefined
+              }
             >
               {currentStep > step.id ? (
                 <Check className="h-4 w-4" />
               ) : (
-                <span className="flex items-center justify-center w-5 h-5 rounded-full border-2">
+                <span className="flex items-center justify-center w-5 h-5 rounded-full border-2"
+                  style={
+                    currentStep === step.id
+                      ? { borderColor: 'currentColor' }
+                      : undefined
+                  }>
                   {step.id}
                 </span>
               )}
@@ -170,7 +186,7 @@ export function PropertyGroupForm({
       </div>
 
       {/* Navigation Buttons */}
-      <div className="px-6 py-4 border-t bg-background">
+      <div className="px-6 py-4 border-t">
         <div className="flex items-center justify-between max-w-3xl mx-auto">
           <Button
             type="button"
