@@ -17,7 +17,7 @@ import {
 } from "../hooks/use-property-groups";
 import { PropertyGroupFormValues } from "../schemas/property-groups.schema";
 import { usePropertyGroup } from "../hooks/use-property-groups";
-import { ValidationApiResponse } from "@/shared/types/common.types";
+import { ApiValidationResponse } from "@/shared/types/common.types";
 import { useGMAOToast } from "@/shared/components/Toaster/toaster";
 
 // Lazy load
@@ -82,7 +82,7 @@ export const PropertyGroupDrawer = memo(function PropertyGroupDrawer() {
                 handleCloseDrawer();
               }
               else {
-                setValidationErrors((data as ValidationApiResponse).errors);
+                setValidationErrors((data as ApiValidationResponse).errors);
                 toast.warning("Erreurs Validations", data.errorMessage);
               }
             },
@@ -99,7 +99,7 @@ export const PropertyGroupDrawer = memo(function PropertyGroupDrawer() {
               handleCloseDrawer();
             }
             else {
-              setValidationErrors((data as ValidationApiResponse).errors);
+              setValidationErrors((data as ApiValidationResponse).errors);
               toast.warning("Erreurs Validations", data.errorMessage);
             }
           },

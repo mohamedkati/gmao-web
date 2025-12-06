@@ -59,10 +59,10 @@ const queryCache = new QueryCache({
   
   onSuccess: (data, query) => {
     if (process.env.NODE_ENV === 'development') {
-      console.log('[React Query] Query Success:', {
-        queryKey: query.queryKey,
-        data,
-      });
+      // console.log('[React Query] Query Success:', {
+      //   queryKey: query.queryKey,
+      //   data,
+      // });
     }
   },
 });

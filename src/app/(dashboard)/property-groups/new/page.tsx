@@ -6,7 +6,7 @@ import { useCreatePropertyGroup } from "@/features/property-groups/hooks/use-pro
 import { PropertyGroupFormValues } from "@/features/property-groups/schemas/property-groups.schema";
 import { useState } from "react";
 import { useGMAOToast } from "@/shared/components/Toaster/toaster";
-import { ValidationApiResponse } from "@/shared/types/common.types";
+import { ApiValidationResponse } from "@/shared/types/common.types";
 
 export default function NewPropertyGroupPage() {
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function NewPropertyGroupPage() {
           router.push("/property-groups");
         }
         else {
-          setValidationErrors((data as ValidationApiResponse).errors);
+          setValidationErrors((data as ApiValidationResponse).errors);
           toast.warning("Erreurs Validations", data.errorMessage);
         }
       },

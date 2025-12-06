@@ -1,6 +1,6 @@
 import { apiClient } from '@/shared/lib/api/api-client';
 import { PropertyGroup, PropertyGroupFormData, PropertyGroupContact } from '../types/property-group.types';
-import { ApiResponse, ValidationApiResponse } from '@/shared/types/common.types';
+import { ApiResponse, ApiValidationResponse } from '@/shared/types/common.types';
 
 const BASE_URL = '/property-groups';
 
@@ -25,7 +25,7 @@ export const propertyGroupService = {
 
   // Update property group
   update: async (id: string, data: Partial<PropertyGroupFormData>) => {
-    const response  : ApiResponse<boolean> | ValidationApiResponse= await apiClient.put(`${BASE_URL}/${id}`, data);
+    const response  : ApiResponse<boolean> | ApiValidationResponse= await apiClient.put(`${BASE_URL}/${id}`, data);
     return response;
   },
 

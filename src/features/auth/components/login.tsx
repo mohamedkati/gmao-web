@@ -14,7 +14,7 @@ import { LoadingSpinner } from '@/shared/components/feedback/loading-spinner';
 import { useAuth } from '@/shared/hooks/use-auth';
 import { cn } from '@/shared/lib/utils/cn';
 import { apiClient } from '@/shared/lib/api/api-client';
-import { ApiResponse, ValidationApiResponse } from '@/shared/types/common.types';
+import { ApiResponse, ApiValidationResponse } from '@/shared/types/common.types';
 import { AuthResponse } from '@/shared/types/auth.types';
 import { isValidationError } from '@/shared/lib/api/api-error-handler';
 
@@ -53,9 +53,9 @@ export default function LoginPage() {
         setErrors(null);
 
         try {
-            const result: ApiResponse<AuthResponse> | ValidationApiResponse = await apiClient.post("/auth/login", data);
+            const result: ApiResponse<AuthResponse> | ApiValidationResponse = await apiClient.post("/auth/login", data);
             if (isValidationError(result)) {
-                const validationResult = result as ValidationApiResponse;
+                const validationResult = result as ApiValidationResponse;
                 if (!validationResult || !validationResult.errors) return;
 
                 Object.entries(validationResult.errors).map(([key, errors]) => {

@@ -12,7 +12,7 @@ import { PropertyGroupFormValues } from "@/features/property-groups/schemas/prop
 import { Skeleton } from "@/shared/components/shadcnui/skeleton";
 import { useState } from "react";
 import { useGMAOToast } from "@/shared/components/Toaster/toaster";
-import { ValidationApiResponse } from "@/shared/types/common.types";
+import { ApiValidationResponse } from "@/shared/types/common.types";
 
 export default function EditPropertyGroupPage({
   params,
@@ -43,7 +43,7 @@ export default function EditPropertyGroupPage({
             router.push("/property-groups");
           }
           else {
-            setValidationErrors((data as ValidationApiResponse).errors);
+            setValidationErrors((data as ApiValidationResponse).errors);
             toast.warning("Erreurs Validations", data.errorMessage);
           }
         },

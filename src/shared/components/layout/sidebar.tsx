@@ -29,8 +29,9 @@ import { themes } from '@/applib/themes/themes-config';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Groups', href: '/property-groups', icon: Package },
+  { name: 'Customers',href: '/customers', icon: Users },
   { name: 'Interventions', href: '/work-orders', icon: Wrench },
-  { name: 'Équipements', href: '/property-groups', icon: Package },
   { name: 'Maintenances', href: '/maintenance', icon: Calendar },
   { name: 'Contrats', href: '/contracts', icon: FileText },
   { name: 'Stock', href: '/inventory', icon: BoxIcon },

@@ -48,16 +48,16 @@ class ClientApi {
 
         // Log en développement
         if (process.env.NODE_ENV === 'development') {
-          console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`, {
-            headers: config.headers,
-            data: config.data,
-          });
+          // console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`, {
+          //   headers: config.headers,
+          //   data: config.data,
+          // });
         }
 
         return config;
       },
       (error) => {
-        console.error('[API Request Error]', error);
+        // console.error('[API Request Error]', error);
         return Promise.reject(error);
       }
     );
@@ -70,26 +70,26 @@ class ClientApi {
       (response: AxiosResponse) => {
         // Log en développement
         if (process.env.NODE_ENV === 'development') {
-          console.log(`[API Response] ${response.config.method?.toUpperCase()} ${response.config.url}`, {
-            status: response.status,
-            data: response.data,
-          });
+          // console.log(`[API Response] ${response.config.method?.toUpperCase()} ${response.config.url}`, {
+          //   status: response.status,
+          //   data: response.data,
+          // });
         }
 
         return handleReponse(response);
       },
       async (error: AxiosError) => {
-        console.error('[API Error Details]', {
-          url: error.config?.url,
-          method: error.config?.method,
-          baseURL: error.config?.baseURL,
-          fullURL: `${error.config?.baseURL}${error.config?.url}`,
-          status: error.response?.status,
-          statusText: error.response?.statusText,
-          data: error.response?.data,
-          headers: error.config?.headers,
-          message: error.message,
-        });
+        // console.error('[API Error Details]', {
+        //   url: error.config?.url,
+        //   method: error.config?.method,
+        //   baseURL: error.config?.baseURL,
+        //   fullURL: `${error.config?.baseURL}${error.config?.url}`,
+        //   status: error.response?.status,
+        //   statusText: error.response?.statusText,
+        //   data: error.response?.data,
+        //   headers: error.config?.headers,
+        //   message: error.message,
+        // });
         const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
         if (error.message === 'Network Error' || !error.response) {
           console.error('[CORS Error] Vérifiez la configuration CORS de votre API');

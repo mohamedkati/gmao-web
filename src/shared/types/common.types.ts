@@ -22,7 +22,7 @@ export interface ApiResponse<T = any> {
   errorMessage?: string;
 }
 
-export interface ValidationApiResponse extends ApiResponse<string> {
+export interface ApiValidationResponse extends ApiResponse<string> {
   isValidationError: boolean;
   errors: Record<string, string[]>;
 }
