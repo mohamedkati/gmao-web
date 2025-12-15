@@ -11,11 +11,13 @@ import { usePropertyGroups } from "@/features/property-groups/hooks/index";
 import { usePropertyGroupStore } from "@/features/property-groups/store/property-group.store";
 import { useRouter } from "next/navigation";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
+import { withPermission } from "@/shared/components/auth";
 
-export default function PropertyGroupsPage() {
+
+function PropertyGroupsPage() {
   const { openDrawer, filters } = usePropertyGroupStore();
   const { data: propertyGroups, isLoading, refetch } = usePropertyGroups(filters);
-const router = useRouter();
+  const router = useRouter();
   const handleExport = () => {
     // TODO: Implement export functionality
     console.log("Export data");
@@ -96,3 +98,5 @@ const router = useRouter();
     </div >
   );
 }
+
+export default withPermission(PropertyGroupsPage, { action: 'view', resource: 'propertygroups', showError: true })

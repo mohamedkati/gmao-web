@@ -15,14 +15,14 @@ import {
 import { ChevronDown } from "lucide-react";
 import { CustomersTable } from "@/features/customers/components/cs-table-listing/cs-table";
 import { CustomersFilters } from "@/features/customers/components/cs-table-listing/cs-filter";
-import { CustomerStatsCards } from "@/features/customers/components/cs-table-listing/cs-states-card";
 import { CustomerDrawer } from "@/features/customers/components//drawers/customer-drawer";
 import { CustomerContactDrawer } from "@/features/customers/components/drawers/customer-contact-drawer";
 import { CustomerBudgetDrawer } from "@/features/customers/components/drawers/customer-budget-drawer";
 import { useCustomers } from "@/features/customers/hooks/user-customers.query";
 import { useCustomerStore } from "@/features/customers/stores/customer.store";
+import { Can, CanAny, withPermission } from "@/shared/components/auth";
 
-export default function CustomersPage() {
+function CustomersPage() {
   const router = useRouter();
   const { openDrawer, filters } = useCustomerStore();
   const { data: customers, isLoading, refetch } = useCustomers(filters);
@@ -59,31 +59,32 @@ export default function CustomersPage() {
             <Upload className="mr-2 h-4 w-4" />
             Importer
           </Button>
+          <Can resource="customers" action="create" children={
+            < DropdownMenu >
+              <DropdownMenuTrigger asChild>
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Nouveau client
+                  <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => openDrawer("create")}>
+                  <span className="font-medium">Mode Drawer</span>
+                  <span className="text-xs text-muted-foreground block">
+                    Création rapide (panneau latéral)
+                  </span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/customers/new")}>
+                  <span className="font-medium">Mode Page</span>
+                  <span className="text-xs text-muted-foreground block">
+                    Création complète (page dédiée)
+                  </span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          } />
 
-          {/* Dropdown pour choisir le mode de création */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Nouveau client
-                <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => openDrawer("create")}>
-                <span className="font-medium">Mode Drawer</span>
-                <span className="text-xs text-muted-foreground block">
-                  Création rapide (panneau latéral)
-                </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push("/customers/new")}>
-                <span className="font-medium">Mode Page</span>
-                <span className="text-xs text-muted-foreground block">
-                  Création complète (page dédiée)
-                </span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
 
@@ -97,9 +98,22 @@ export default function CustomersPage() {
       <CustomersTable data={customers || []} isLoading={isLoading} />
 
       {/* Drawers */}
-      <CustomerDrawer />
-      <CustomerContactDrawer />
-      <CustomerBudgetDrawer />
-    </div>
+      <CanAny children={<CustomerDrawer />} checks={[
+        { action: "viewdetails", resource: 'customer' },
+        { action: "edit", resource: "customers" },
+        { action: "create", resource: "customers" },
+      ]} />
+      <CanAny children={<CustomerContactDrawer />} checks={[
+        { action: "edit", resource: "customercontacts" },
+        { action: "create", resource: "customercontacts" },
+      ]} />
+      <CanAny children={<CustomerBudgetDrawer />} checks={[
+        { action: "edit", resource: "customerbudgets" },
+        { action: "create", resource: "customerbudgets" },
+      ]} />
+
+    </div >
   );
 }
+
+export default withPermission(CustomersPage, { action: "view", resource: "customers", showError: true });

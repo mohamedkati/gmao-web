@@ -1,12 +1,9 @@
 'use client';
 
 import { ReactNode, useEffect } from 'react';
-import { useAuthStore } from '@/store/auth.store';
-import { useRouter } from 'next/navigation';
-import { AuthService } from '@/features/auth/services/auth.service';
-import { isAuthenticated, logout } from '@/shared/lib/auth/auth-utils';
 import { LoadingOverlay } from '@/shared/components';
-
+import { useRequireAuth } from '@/shared/hooks/use-auth';
+import { Skeleton } from '@/shared/components/shadcnui/skeleton';
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -15,49 +12,35 @@ interface AuthProviderProps {
  * Provider pour gérer l'authentification
  */
 export function AuthProvider({ children }: AuthProviderProps) {
-  const { setUser, setLoading, isLoading } = useAuthStore();
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
-  useEffect(() => {
-    // Vérifier l'authentification au montage
-    const checkAuth = async () => {
-      try {
-        // Vérifier si le token existe et n'est pas expiré
-        // TODO
-        // if (isTokenExpired()) {
-        //   setUser(null);
-        //   setLoading(false);
-        //   return;
-        // }
+  //  Protection automatique : redirige vers /login si non authentifié
+  const { user, isLoading } = useRequireAuth("/login");
+  // Skeleton pendant le chargement
+  if (isLoading) {
+    return (
+      <div className="flex h-screen">
+        <Skeleton className="w-64 h-full" />
+        <div className="flex-1 flex flex-col">
+          <Skeleton className="h-16 w-full" />
+          <div className="flex-1 p-6 space-y-4">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-64 w-full" />
+            <Skeleton className="h-64 w-full" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-        // Récupérer l'utilisateur depuis le token
-        // const user = getUserFromToken();
-        if (isAuthenticated()) {
-          const user = await AuthService.getCurrentUserByToken();
-          if (user.isSucceeded) {
-            setUser(user.data.user);
-
-          } else {
-            setUser(null);
-            logout();
-          }
-        }
-
-      } catch (error) {
-        console.error('[Auth Provider] Error checking auth:', error);
-        setUser(null);
-        logout();
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, [setUser, setLoading, router]);
-
-   if(isLoading)
+  if (isLoading)
     return <LoadingOverlay message='Loading ...' />
+
+  // Si pas de user après loading, null (redirection en cours)
+  if (!user) {
+    return null;
+  }
+
   return <>
     {children}
   </>;
 }
+

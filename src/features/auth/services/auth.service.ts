@@ -8,8 +8,8 @@ export const AuthService = {
         return await apiClient.post(authConfig.pages.signIn, { email: form.email, password: form.password });
     },
 
-    getCurrentUserByToken: async () => {
-        const result: ApiResponse<AuthUserTenant> = await apiClient.get(authConfig.pages.verifyRequest);
+    getCurrentUser: async () => {
+        const result: ApiResponse<AuthUserTenant> = await apiClient.get(authConfig.pages.me);
         return result;
     }
 };

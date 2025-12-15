@@ -36,8 +36,8 @@ const navigation = [
   { name: 'Contrats', href: '/contracts', icon: FileText },
   { name: 'Stock', href: '/inventory', icon: BoxIcon },
   { name: 'Clients', href: '/customers', icon: Building2 },
-  { name: 'Techniciens', href: '/technicians', icon: Users },
-  { name: 'Rapports', href: '/reports', icon: BarChart3 },
+  { name: 'Techniciens', href: '/admin/roles', icon: Users },
+  { name: 'Settings', href: '/admin/permissions', icon: BarChart3 },
 ];
 
 export function Sidebar() {

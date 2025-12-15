@@ -1,11 +1,10 @@
 import '@/styles/globals.css';
 import type { Metadata } from 'next';
-import { AppProviders } from '@/providers/app-providers';
 // import { getTenantFromServer } from '@/shared/lib/tenant/tenant-utils';
-import { ThemeProvider } from '@/providers/theme-provider';
-
 // const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 import { Manrope } from 'next/font/google';
+import { QueryProvider } from '@/providers/query-provider';
+import { ThemeProvider } from '@/providers/theme-provider';
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -49,11 +48,10 @@ export default async function RootLayout({
           // enableSystem
           disableTransitionOnChange
         >
-          <AppProviders initialTenant={undefined}>
+          <QueryProvider>
             {children}
-          </AppProviders>
+          </QueryProvider>
         </ThemeProvider>
-
       </body>
     </html>
   );

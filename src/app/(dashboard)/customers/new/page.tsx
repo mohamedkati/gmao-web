@@ -1,5 +1,3 @@
-// src/app/(dashboard)/customers/new/page.tsx
-
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -10,8 +8,9 @@ import { useState } from "react";
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "@/shared/lib/constants/app.messages.constants";
 import { ApiValidationResponse } from "@/shared/types/common.types";
 import { useGMAOToast } from "@/shared/components/Toaster/toaster";
+import { withPermission } from "@/shared/components/auth";
 
-export default function NewCustomerPage() {
+function NewCustomerPage() {
   const router = useRouter();
   const [validationErrors, setValidationErrors] = useState<Record<string, string[]> | undefined>(undefined);
   const createMutation = useCreateCustomer();
@@ -50,3 +49,6 @@ export default function NewCustomerPage() {
     />
   );
 }
+
+
+export default withPermission(NewCustomerPage, { action: "create", resource: "customers", showError: true })

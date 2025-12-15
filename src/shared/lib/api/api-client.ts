@@ -5,11 +5,28 @@ import { getTenantId } from '../tenant/tenant-utils';
 import { getAuthToken, refreshToken, clearTokens } from '../auth/token-manager';
 import { toast } from 'sonner';
 import qs from "qs";
+import { QUERY_KEYS, queryClient } from './query-client';
 /**
  * Instance Axios configurée pour l'application
  */
 class ClientApi {
   private client: AxiosInstance;
+  private isRefreshing = false;
+  private failedQueue: any[] = [];
+
+  //Variable pour éviter les refresh multiples simultanés
+  processQueue(error: any, token: string | null = null) {
+    this.failedQueue.forEach((prom) => {
+      if (error) {
+        prom.reject(error);
+      } else {
+        prom.resolve(token);
+      }
+    });
+    this.failedQueue = [];
+  }
+
+
   constructor() {
     this.client = axios.create({
       baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -98,39 +115,70 @@ class ClientApi {
             originalError: error
           });
         }
-        // Gestion du 401 (Unauthorized) - Tentative de refresh token
+        // ===== GESTION 401 (Non authentifié / Token expiré) =====
         if (error.response?.status === 401 && !originalRequest._retry) {
+          if (this.isRefreshing) {
+            // Si déjà en train de refresh, mettre en queue
+            return new Promise((resolve, reject) => {
+              this.failedQueue.push({ resolve, reject });
+            })
+              .then(() => apiClient(originalRequest))
+              .catch((err) => Promise.reject(err));
+          }
+
           originalRequest._retry = true;
+          this.isRefreshing = true;
 
-          try {
-            const newToken = await refreshToken();
+         // try {
+        //     // Tenter de refresh le token
+        //     await apiClient.post("/api/auth/refresh");
 
-            if (newToken && originalRequest.headers) {
-              originalRequest.headers.Authorization = `Bearer ${newToken}`;
-              return apiClient(originalRequest);
-            }
-          } catch (refreshError) {
-            // Impossible de rafraîchir le token
-            clearTokens();
+        //     // Si succès, traiter la queue et retry
+        //     this.processQueue(null);
+        //     this.isRefreshing = false;
+        //     return apiClient(originalRequest);
+        //   } catch (refreshError) {
+        //     // Si refresh échoue, déconnecter l'utilisateur
+        //     this.processQueue(refreshError, null);
+        //     this.isRefreshing = false;
 
-            // Redirect vers login (côté client uniquement)
-            if (typeof window !== 'undefined') {
-              window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
-            }
+        //     // Rediriger vers login
+        //     if (typeof window !== "undefined") {
+        //       //window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+        //     }
 
-            return Promise.reject(refreshError);
-          }
-        }
+        //     return Promise.reject(refreshError);
+        //   }
+        // }
+        // Gestion du 401 (Unauthorized) - Tentative de refresh token
+        // if (error.response?.status === 401 && !originalRequest._retry) {
+        //   originalRequest._retry = true;
 
-        // Gestion du 403 (Forbidden)
+        //   try {
+        //     const newToken = await refreshToken();
+
+        //     if (newToken && originalRequest.headers) {
+        //       originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        //       return apiClient(originalRequest);
+        //     }
+        //   } catch (refreshError) {
+        //     // Impossible de rafraîchir le token
+        //     clearTokens();
+
+        //     // Redirect vers login (côté client uniquement)
+        //     if (typeof window !== 'undefined') {
+        //       window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+        //     }
+
+        //     return Promise.reject(refreshError);
+        //   }
+         }
         if (error.response?.status === 403) {
-          console.error('[API] Accès refusé:', error.response.data);
-          toast.error('Vous n\'avez pas les permissions nécessaires');
-
-          if (typeof window !== 'undefined') {
-            // Afficher un message d'erreur
-            // toast.error('Vous n\'avez pas les permissions nécessaires');
-          }
+          // Afficher un message clair
+          toast.error("Vous n'avez pas la permission pour cette action");
+          console.log("test");
+          // Recharger les permissions (peut-être ont-elles changé)
+          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PERMISSIONS });
         }
 
         // Gestion du 404 (Not Found)

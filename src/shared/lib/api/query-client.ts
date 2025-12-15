@@ -107,7 +107,8 @@ export const QUERY_KEYS = {
   // Auth
   AUTH: ['auth'],
   CURRENT_USER: ['auth', 'current-user'],
-  
+  PERMISSIONS: ["auth", "permissions"] as const,
+  CONFIG: ["permissions", "config"] as const,
   // Work Orders
   WORK_ORDERS: ['work-orders'],
   WORK_ORDER: (id: string) => ['work-orders', id],

@@ -66,7 +66,7 @@ export function TenantProvider({ children, initialTenant }: TenantProviderProps)
       // if (!response.ok) {
       //   throw new Error('Failed to fetch tenant info');
       // }
-      var user: ApiResponse<AuthUserTenant> = await AuthService.getCurrentUserByToken();
+      var user: ApiResponse<AuthUserTenant> = await AuthService.getCurrentUser();
       // const data = await response.json();
       if (user.isSucceeded)
         setTenant(user.data.tenant);

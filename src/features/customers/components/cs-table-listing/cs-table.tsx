@@ -19,6 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/shared/components/shadcnui/alert-dialog";
+import { Can } from "@/shared/components/auth";
 
 interface CustomersTableProps {
   data: Customer[];
@@ -93,35 +94,36 @@ export function CustomersTable({ data, isLoading }: CustomersTableProps) {
         searchPlaceholder="Rechercher par nom ou référence..."
         isLoading={isLoading}
       />
-
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
-            <AlertDialogDescription>
-              Êtes-vous sûr de vouloir supprimer le client{" "}
-              <strong>{customerToDelete?.companyName}</strong> ? Cette action est
-              irréversible et supprimera également tous les contacts et budgets associés.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Annuler</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleConfirmDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {deleteMutation.isPending ? (
-                <>
-                  <span className="spinner mr-2 h-4 w-4" />
-                  Suppression...
-                </>
-              ) : (
-                "Supprimer définitivement"
-              )}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <Can action="delete" resource="customers">
+        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
+              <AlertDialogDescription>
+                Êtes-vous sûr de vouloir supprimer le client{" "}
+                <strong>{customerToDelete?.companyName}</strong> ? Cette action est
+                irréversible et supprimera également tous les contacts et budgets associés.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Annuler</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleConfirmDelete}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                {deleteMutation.isPending ? (
+                  <>
+                    <span className="spinner mr-2 h-4 w-4" />
+                    Suppression...
+                  </>
+                ) : (
+                  "Supprimer définitivement"
+                )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </Can>
     </>
   );
 }

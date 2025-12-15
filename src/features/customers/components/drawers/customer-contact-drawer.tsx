@@ -20,6 +20,8 @@ import { ApiResponse, ApiValidationResponse } from "@/shared/types/common.types"
 import { useGMAOToast } from "@/shared/components/Toaster/toaster";
 import { ERROR_MESSAGES } from "@/shared/lib/constants/app.messages.constants";
 import { SkeletonLoader } from "@/shared/components";
+import { Alert, AlertDescription } from "@/shared/components/shadcnui/alert";
+import { AlertCircle } from "lucide-react";
 
 export function CustomerContactDrawer() {
   const {
@@ -46,7 +48,7 @@ export function CustomerContactDrawer() {
   // }
 
   const isEditMode = selectedContactId !== null;
-  const { data: contactToEdit, isLoading: isLoadingData } = useCustomerContact(selectedCustomerId || '', selectedContactId || '');
+  const { data: contactToEdit, isLoading: isLoadingData, error } = useCustomerContact(selectedCustomerId || '', selectedContactId || '');
 
   const handleSubmit = (data: ContactFormValues) => {
     setValidationErrors(undefined);
@@ -104,17 +106,25 @@ export function CustomerContactDrawer() {
 
         <div className="mt-6">
           {
-            isLoadingData ?
-              (<SkeletonLoader type="form" count={5} />) :
-              (
-                <CustomerContactForm
-                  initialData={isEditMode ? contactToEdit : undefined}
-                  onSubmit={handleSubmit}
-                  onCancel={closeContactDrawer}
-                  isLoading={isLoading}
-                  validationErrors={validationErrors}
-                />
-              )
+            isEditMode && isLoadingData ?
+              <SkeletonLoader type="form" count={5} /> :
+              error ? (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    Erreur lors du chargement du contact. Veuillez réessayer.
+                  </AlertDescription>
+                </Alert>
+              ) :
+                (
+                  <CustomerContactForm
+                    initialData={isEditMode ? contactToEdit : undefined}
+                    onSubmit={handleSubmit}
+                    onCancel={closeContactDrawer}
+                    isLoading={isLoading}
+                    validationErrors={validationErrors}
+                  />
+                )
           }
 
         </div>

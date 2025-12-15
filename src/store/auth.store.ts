@@ -17,6 +17,7 @@ interface AuthActions {
   setLoading: (loading: boolean) => void;
   setTenant: (tenant: Tenant | null) => void;
   logout: () => void;
+  
 }
 
 type AuthStore = AuthState & AuthActions;

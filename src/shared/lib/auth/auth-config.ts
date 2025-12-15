@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * Configuration de l'authentification
  */
 export const authConfig = {
+  
   // Pages
   pages: {
     signIn: '/auth/login',
     signOut: '/auth/logout',
     error: '/auth/error',
     verifyRequest: '/auth/verify-request',
-    me: '/auth/account/me',
+    me: '/auth/me',
     newUser: '/dashboard', // Redirect après inscription
   },
 

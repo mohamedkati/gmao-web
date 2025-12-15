@@ -25,6 +25,8 @@ import {
 import { customerTypeLabels, getCustomerTypeColor, formatCurrency } from "../../utils/customer.utils";
 import Link from "next/link";
 import { formatNumber } from "@/shared/lib/utils/currency";
+import { Can } from "@/shared/components/auth/can";
+import { CanAll, CanAny } from "@/shared/components/auth";
 
 interface ColumnActions {
   onView: (customerId: string) => void;
@@ -178,43 +180,57 @@ export const createCustomerColumns = (actions: ColumnActions): ColumnDef<Custome
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => actions.onView(customer.id)}>
-              <Eye className="mr-2 h-4 w-4" />
-              Voir les détails
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => actions.onViewOnPage(customer.id)}>
-              <Eye className="mr-2 h-4 w-4" />
-              Voir les détails on page
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel className="text-xs text-muted-foreground">
-              Modifier
-            </DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => actions.onEdit(customer.id)}>
-              <Pencil className="mr-2 h-4 w-4" />
-              Modifier (Drawer)
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => actions.onEditPage(customer.id)}>
-              <Pencil className="mr-2 h-4 w-4" />
-              Modifier (Page)
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => actions.onManageContacts(customer.id)}>
-              <Users className="mr-2 h-4 w-4" />
-              Gérer les contacts
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => actions.onManageBudgets(customer.id)}>
-              <Wallet className="mr-2 h-4 w-4" />
-              Gérer les budgets
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => actions.onDelete(customer)}
-              className="text-destructive"
-            >
-              <Trash className="mr-2 h-4 w-4" />
-              Supprimer
-            </DropdownMenuItem>
+            <Can resource='customers' action='viewdetails'>
+              <DropdownMenuItem onClick={() => actions.onView(customer.id)}>
+                <Eye className="mr-2 h-4 w-4" />
+                Voir les détails
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => actions.onViewOnPage(customer.id)}>
+                <Eye className="mr-2 h-4 w-4" />
+                Voir les détails on page
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+
+            </Can>
+            <Can resource="customers" action="edit">
+              {/* <DropdownMenuLabel className="text-xs text-muted-foreground">
+                Modifier
+              </DropdownMenuLabel> */}
+              <DropdownMenuItem onClick={() => actions.onEdit(customer.id)}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Modifier (Drawer)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => actions.onEditPage(customer.id)}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Modifier (Page)
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </Can>
+            <Can resource="customercontacts" action="view" >
+              <DropdownMenuItem onClick={() => actions.onManageContacts(customer.id)}>
+                <Users className="mr-2 h-4 w-4" />
+                Gérer les contacts
+              </DropdownMenuItem>
+            </Can>
+            <Can resource="customerbudgets" action="view" >
+              <DropdownMenuItem onClick={() => actions.onManageBudgets(customer.id)}>
+                <Wallet className="mr-2 h-4 w-4" />
+                Gérer les budgets
+              </DropdownMenuItem>
+            </Can>
+            <CanAny checks={[{ resource: "customerbudgets", action: "view" }, { resource: "customercontacts", action: "view" }]}>
+              <DropdownMenuSeparator />
+            </CanAny>
+            <Can resource="customers" action="delete">
+              <DropdownMenuItem
+                onClick={() => actions.onDelete(customer)}
+                className="text-destructive"
+              >
+                <Trash className="mr-2 h-4 w-4" />
+                Supprimer
+              </DropdownMenuItem>
+            </Can>
+
           </DropdownMenuContent>
         </DropdownMenu>
       );

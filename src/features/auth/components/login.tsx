@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,12 +11,17 @@ import { Input } from '@/shared/components/shadcnui/input';
 import { Label } from '@/shared/components/shadcnui/label';
 import { Checkbox } from '@/shared/components/shadcnui/checkbox';
 import { LoadingSpinner } from '@/shared/components/feedback/loading-spinner';
-import { useAuth } from '@/shared/hooks/use-auth';
+import { useAuth, useCurrentUser, useLogin } from '@/shared/hooks/use-auth';
 import { cn } from '@/shared/lib/utils/cn';
 import { apiClient } from '@/shared/lib/api/api-client';
 import { ApiResponse, ApiValidationResponse } from '@/shared/types/common.types';
 import { AuthResponse } from '@/shared/types/auth.types';
 import { isValidationError } from '@/shared/lib/api/api-error-handler';
+import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@/shared/lib/api/query-client';
+import { permissionsPublicService } from '@/shared/services/permissions-public.service';
+import { setTokens } from '@/shared/lib/auth/token-manager';
 
 // const backEndUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -29,10 +34,13 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-    const { authenticate, } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setErrors] = useState<string[] | null>(null);
     const [showPassword, setShowPassword] = useState(false);
+    const { data: user } = useCurrentUser();
+    const loginMutate = useLogin();
+    const router = useRouter();
+    const queryClient = useQueryClient();
 
     const {
         register,
@@ -42,38 +50,43 @@ export default function LoginPage() {
     } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
-            email: '',
-            password: '',
+            email: 'mohammed.kati@axeciel.fr',
+            password: 'Admin@123',
             rememberMe: false,
         },
     });
 
+    useEffect(() => {
+        if (user)
+            router.push("/dashboard");
+    }, [router, user]);
+
     const onSubmit = async (data: LoginFormData) => {
         setIsLoading(true);
         setErrors(null);
-
         try {
-            const result: ApiResponse<AuthResponse> | ApiValidationResponse = await apiClient.post("/auth/login", data);
-            if (isValidationError(result)) {
-                const validationResult = result as ApiValidationResponse;
-                if (!validationResult || !validationResult.errors) return;
+            loginMutate.mutate(data, {
+                onSuccess: (result) => {
+                    if (isValidationError(result)) {
+                        const validationResult = result as ApiValidationResponse;
+                        if (!validationResult || !validationResult.errors) return;
 
-                Object.entries(validationResult.errors).map(([key, errors]) => {
-                    if (key === "credentials") {
-                        setErrors(errors);
+                        Object.entries(validationResult.errors).map(([key, errors]) => {
+                            if (key === "credentials") {
+                                setErrors(errors);
+                            }
+                            else {
+                                const fieldName = key === 'email' ? 'email' : key === 'password' ? 'password' : 'rememberMe';
+                                setErrorOnField(fieldName, { type: 'value', message: errors.join("<br/>") });
+                            }
+                        });
                     }
-                    else {
-                        const fieldName = key === 'email' ? 'email' : key === 'password' ? 'password' : 'rememberMe';
-                        setErrorOnField(fieldName, { type: 'value', message: errors.join("<br/>") });
-                    }
-                });
-            }
-            else {
-                const authResponse = result as ApiResponse<AuthResponse>;
-                authenticate(authResponse.data.token, "");
-                location.href = "/dashboard";
-                location.reload();
-            }
+                },
+                onError: (error) => {
+                    setErrors([error]);
+                }
+            });
+
         } catch (err) {
             console.log(err);
             setErrors(['Email ou mot de passe incorrect']);

@@ -23,10 +23,12 @@ import { cn } from '@/shared/lib/utils/cn';
 
 export function Header() {
   const { setSidebarOpen } = useUIStore();
-  const { user, logout } = useAuth();
+  const { user: auth, logout } = useAuth();
   // const { unreadCount } = useNotificationsStore();
   const isMobile = useIsMobile();
-
+  const logUserOut = ()=>{
+    logout();
+  }
   return (
     <header className={cn(
       'h-16 border-b sticky top-0 z-40',
@@ -83,16 +85,16 @@ export function Header() {
                 )}
               >
                 <Avatar className="h-8 w-8 ring-2 ring-primary/20">
-                  <AvatarImage src={user?.avatar} alt={user?.fullName} />
+                  <AvatarImage src={auth?.user?.avatar} alt={auth?.user?.fullName} />
                   <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground font-semibold text-sm">
-                    {user ? getInitials(user.fullName) : 'U'}
+                    {auth?.user ? getInitials(auth?.user.fullName) : 'U'}
                   </AvatarFallback>
                 </Avatar>
                 {!isMobile && (
                   <div className="flex flex-col items-start">
-                    <span className="text-sm font-medium">{user?.firstName}</span>
+                    <span className="text-sm font-medium">{auth?.user?.firstName}</span>
                     <span className="text-xs text-muted-foreground capitalize">
-                      {user?.role}
+                      {auth?.user?.role}
                     </span>
                   </div>
                 )}
@@ -101,8 +103,8 @@ export function Header() {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium">{user?.fullName}</p>
-                  <p className="text-xs text-muted-foreground">{user?.email}</p>
+                  <p className="text-sm font-medium">{auth?.user?.fullName}</p>
+                  <p className="text-xs text-muted-foreground">{auth?.user?.email}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -118,7 +120,7 @@ export function Header() {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={logout}
+                onClick={logUserOut}
                 className="text-destructive focus:text-destructive cursor-pointer"
               >
                 Se déconnecter

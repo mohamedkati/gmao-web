@@ -1,6 +1,11 @@
-// 'use client';
+'use client';
+import { useCurrentUser } from '@/shared/hooks/use-auth';
+import { queryClient } from '@/shared/lib/api/query-client';
+import { QueryClientProvider } from '@tanstack/react-query';
 // import { ReactNode } from 'react';
 import { ArrowRight, Sparkles, Wrench } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 // interface AuthLayoutProps {
 //   children: ReactNode;
@@ -18,6 +23,20 @@ export default function AuthLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const router = useRouter();
+    const { data: user, isLoading } = useCurrentUser();
+
+    // Si déjà connecté, rediriger vers dashboard
+    useEffect(() => {
+        if (!isLoading && user) {
+            router.push("/");
+        }
+    }, [user, isLoading, router]);
+
+    // Ne pas afficher le layout si déjà connecté (redirection en cours)
+    if (user) {
+        return null;
+    }
     return (
         <div className="min-h-screen flex relative overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
             {/* Animated Background */}
@@ -163,5 +182,6 @@ export default function AuthLayout({
         }
       `}</style> */}
         </div>
+
     );
 }

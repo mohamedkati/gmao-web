@@ -66,3 +66,25 @@ export interface AuthUserTenant {
   user: User,
   tenant: Tenant
 }
+export interface UserPermissions {
+  userId: string;
+  role: string;
+  permissions: string[]; // Liste des codes: ["customers:view", "customers:create", ...]
+  permissionsByResource: Record<string, string[]>; // { "customers": ["view", "create"], ... }
+}
+export interface PermissionConfig {
+  resources: string[];
+  actions: string[];
+  resourceActions: Record<string, string[]>;
+  allPermissions: PermissionDto[];
+}
+
+export interface PermissionDto {
+  resource: string;
+  action: string;
+  code: string;
+  label: string;
+  description: string;
+  category: "standard" | "specific";
+  isDangerous: boolean;
+}

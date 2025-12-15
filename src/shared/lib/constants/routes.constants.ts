@@ -1,6 +1,7 @@
 /**
  * Routes de l'application
  */
+export const PUBLIC_ROUTES = ['/', '/login', '/register', '/forgot-password', '/reset-password'];
 export const ROUTES = {
   // Public
   HOME: '/',
