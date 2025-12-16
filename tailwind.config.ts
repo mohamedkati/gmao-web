@@ -191,7 +191,12 @@ const config: Config = {
 				warning: "hsl(var(--color-warning))",
 				error: "hsl(var(--color-error))",
 				info: "hsl(var(--color-info))",
-
+				// Couleurs Stripe (EN PLUS de vos couleurs existantes)
+				stripe: {
+					DEFAULT: "#635bff",
+					hover: "#7a73ff",
+					light: "#e0d9ff",
+				},
 				// shadcn/ui colors (garde les valeurs par défaut)
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
