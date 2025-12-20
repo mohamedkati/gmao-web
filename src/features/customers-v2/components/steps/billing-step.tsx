@@ -1,11 +1,8 @@
-// src/features/customers/components/steps/billing-step.tsx
-
 "use client";
 
 import { UseFormReturn } from "react-hook-form";
-import { FormCard, FormSection, FormFieldWrapper } from "@/shared/components/forms";
+import { FormCard, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/shadcnui/input";
-import { Switch } from "@/shared/components/shadcnui/switch";
 import {
     Select,
     SelectContent,
@@ -23,8 +20,7 @@ import {
     Mail,
     AlertCircle,
 } from "lucide-react";
-import { BillingMode, CustomerFormData, InvoiceFrequency } from "../../types/customer.types";
-import { OptionCheckCard } from "@/shared/components/cards";
+import { CustomerFormData } from "../../types/customer.types";
 import { Slider } from "@/shared/components/shadcnui/slider";
 import { billingModeLabels, invoiceFrequencyLabels } from "../../utils/customer.utils";
 import { OptionToggleCard } from "@/shared/components/cards/option-toggle-card";
@@ -100,6 +96,7 @@ export function BillingStep({ form }: BillingStepProps) {
                     description="Périodicité d'émission des factures"
                     icon={Clock}
                     required
+                    className="mt-2"
                 >
                     <FormField
                         control={form.control}
@@ -130,64 +127,7 @@ export function BillingStep({ form }: BillingStepProps) {
                         )}
                     />
                 </FormSection>
-
-                <FormSection
-                    title="Conditions de paiement"
-                    description="Délai accordé pour le règlement"
-                    icon={Calendar}
-                    required
-                >
-                    <div className="space-y-4">
-                        <FormField
-                            control={form.control}
-                            name="billingSettings.paymentTermsDays"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>
-                                        <div className="flex items-center gap-2">
-                                            {`Délai de paiement : ${paymentTermsDays} jours`}
-                                            <span className="text-destructive">*</span>
-                                        </div>
-                                    </FormLabel>
-                                    <FormControl>
-                                        <div className="pt-2">
-                                            <Slider
-                                                value={[paymentTermsDays]}
-                                                onValueChange={([value]) => field.onChange(value)}
-                                                min={0}
-                                                max={90}
-                                                step={5}
-                                                className="w-full"
-                                            />
-                                            <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                                                <span>0 jours</span>
-                                                <span>30 jours</span>
-                                                <span>60 jours</span>
-                                                <span>90 jours</span>
-                                            </div>
-                                        </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* Preview du délai */}
-                        <div className="p-4 rounded-lg backdrop-blur-sm bg-gradient-to-br from-primary/10 to-purple-500/10 border border-primary/20">
-                            <div className="flex items-center gap-3">
-                                <Calendar className="h-5 w-5 text-primary" />
-                                <div>
-                                    <p className="font-semibold text-sm">
-                                        Échéance de paiement
-                                    </p>
-                                    <p className="text-xs text-muted-foreground">
-                                        Les factures seront payables sous {paymentTermsDays} jours
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </FormSection>
+                
             </FormCard>
 
             {/* Options de facturation */}
@@ -264,10 +204,10 @@ export function BillingStep({ form }: BillingStepProps) {
                                     name="billingSettings.latePaymentFeePercent"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Pourcentage des frais : {field.value}%</FormLabel>
+                                            <FormLabel>Pourcentage des frais : {lateFeesPercent}%</FormLabel>
                                             <FormControl>
                                                 <Slider
-                                                    value={[lateFeesPercent || 0]}
+                                                    value={[lateFeesPercent]}
                                                     onValueChange={([value]) => field.onChange(value)}
                                                     min={0}
                                                     max={20}

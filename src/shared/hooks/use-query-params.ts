@@ -1,5 +1,3 @@
-// src/shared/hooks/use-query-params.ts
-
 "use client";
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
@@ -15,15 +13,15 @@ export function useQueryParams<T extends Record<string, any>>(options?: {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-const arrayKeys = options?.arrayKeys || [];
+  const arrayKeys = options?.arrayKeys || [];
   // Lire les params depuis l'URL
   const params = useMemo((): Partial<T> => {
     const result: any = {};
-    
+
     searchParams.forEach((value, key) => {
       // Gérer les arrays (ex: types[]=1&types[]=2 ou types=1,2,3)
       if (result[key]) {
-        result[key] = Array.isArray(result[key]) 
+        result[key] = Array.isArray(result[key])
           ? [...result[key], parseValue(value)]
           : [result[key], parseValue(value)];
       } else if (value.includes(",")) {
@@ -31,21 +29,21 @@ const arrayKeys = options?.arrayKeys || [];
         result[key] = value.split(",").map(parseValue);
       } else if (arrayKeys.includes(key)) {
         result[key] = [parseValue(value)];
-      }else {
+      } else {
         result[key] = parseValue(value);
       }
     });
-    
+
     return result;
   }, [searchParams]);
 
   // Parser une valeur (convertir en nombre/boolean si possible)
- 
+
 
   // Mettre à jour les params dans l'URL
   const setParams = useCallback((newParams: Partial<T>, options?: { replace?: boolean; scroll?: boolean }) => {
     const current = new URLSearchParams(searchParams.toString());
-    
+
     Object.entries(newParams).forEach(([key, value]) => {
       if (value === undefined || value === null || value === "" || (Array.isArray(value) && value.length === 0)) {
         current.delete(key);
@@ -59,7 +57,7 @@ const arrayKeys = options?.arrayKeys || [];
 
     const search = current.toString();
     const url = search ? `${pathname}?${search}` : pathname;
-    
+
     if (options?.replace) {
       router.replace(url, { scroll: options.scroll ?? false });
     } else {
@@ -76,7 +74,7 @@ const arrayKeys = options?.arrayKeys || [];
   const removeParams = useCallback((keys: string[]) => {
     const current = new URLSearchParams(searchParams.toString());
     keys.forEach(key => current.delete(key));
-    
+
     const search = current.toString();
     const url = search ? `${pathname}?${search}` : pathname;
     router.push(url);
@@ -90,15 +88,15 @@ const arrayKeys = options?.arrayKeys || [];
   };
 }
 
- const parseValue = (value: string): any => {
-    // Boolean
-    if (value === "true") return true;
-    if (value === "false") return false;
-    
-    // Number
-    const num = Number(value);
-    if (!isNaN(num) && value !== "") return num;
-    
-    // String
-    return value;
-  };
+const parseValue = (value: string): any => {
+  // Boolean
+  if (value === "true") return true;
+  if (value === "false") return false;
+
+  // Number
+  const num = Number(value);
+  if (!isNaN(num) && value !== "") return num;
+
+  // String
+  return value;
+};

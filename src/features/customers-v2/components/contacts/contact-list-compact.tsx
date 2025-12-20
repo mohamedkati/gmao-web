@@ -1,5 +1,3 @@
-// src/features/customers/components/contact-list-compact.tsx
-
 "use client";
 
 import { useState } from "react";
@@ -7,7 +5,7 @@ import { Avatar, AvatarFallback } from "@/shared/components/shadcnui/avatar";
 import { Badge } from "@/shared/components/shadcnui/badge";
 import { Button } from "@/shared/components/shadcnui/button";
 import { Mail, Phone, ChevronDown, ChevronRight, Star, Copy, MessageSquare } from "lucide-react";
-import { CustomerContact, PersonType, PreferredContactMethod } from "../types/customer.types";
+import { CustomerContact, PersonType, PreferredContactMethod } from "../../types/customer.types";
 import { cn } from "@/shared/lib/utils/cn";
 
 interface ContactListCompactProps {

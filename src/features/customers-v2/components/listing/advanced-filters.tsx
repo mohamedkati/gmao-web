@@ -1,5 +1,3 @@
-// src/features/customers/components/advanced-filters.tsx
-
 "use client";
 
 import { useState } from "react";
@@ -21,7 +19,7 @@ import {
 import { Badge } from "@/shared/components/shadcnui/badge";
 import { Filter, X } from "lucide-react";
 import { Separator } from "@/shared/components/shadcnui/separator";
-import { CustomerType } from "../types/customer.types";
+import { CustomerType } from "../../types/customer.types";
 
 export interface FilterValue {
   id: string;

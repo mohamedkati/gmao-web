@@ -1,11 +1,9 @@
-// src/features/customers/components/customer-contacts-section.tsx
-
 "use client";
 
 import { Button } from "@/shared/components/shadcnui/button";
 import { User, Plus } from "lucide-react";
-import { Customer } from "../../types/customer.types";
-import { ContactCardGlassCompact } from "../contact-card-glass-compact";
+import { Customer } from "../../../types/customer.types";
+import { ContactCardGlassCompact } from "../../contacts/contact-card-glass-compact";
 
 interface CustomerContactsSectionProps {
   customer: Customer;

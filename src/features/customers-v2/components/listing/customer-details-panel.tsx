@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { Button } from "@/shared/components/shadcnui/button";
 import { Avatar, AvatarFallback } from "@/shared/components/shadcnui/avatar";
 import { Badge } from "@/shared/components/shadcnui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/shadcnui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/shadcnui/tabs";
 import { Skeleton } from "@/shared/components/shadcnui/skeleton";
 import { Progress } from "@/shared/components/shadcnui/progress";
@@ -13,7 +12,6 @@ import {
   X,
   Mail,
   Phone,
-  MapPin,
   Building,
   Calendar,
   FileText,
@@ -31,13 +29,12 @@ import {
   Sparkles,
   ExternalLink,
   Star,
-  ChevronRight,
   Percent,
   Zap,
 } from "lucide-react";
-import { Customer, CustomerType, BillingMode, InvoiceFrequency, PersonType, PreferredContactMethod } from "../types/customer.types";
+import { CustomerType, BillingMode, InvoiceFrequency, PreferredContactMethod } from "../../types/customer.types";
 import { useCustomer } from "@/features/customers-v2/hooks/user-customers.query";
-import { ContactCardGlassCompact } from "./contact-card-glass-compact";
+import { ContactCardGlassCompact } from "../contacts/contact-card-glass-compact";
 import { cn } from "@/shared/lib/utils/cn";
 
 interface CustomerDetailsPanelProps {

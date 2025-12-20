@@ -1,4 +1,3 @@
-// src/features/customers/lib/customer.utils.ts
 
 import {
   CustomerType,

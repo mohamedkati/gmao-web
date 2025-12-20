@@ -1,8 +1,6 @@
-// src/features/customers/hooks/use-customer-form.ts
-
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -81,6 +79,7 @@ export function useCustomerForm({ initialData, mode }: UseCustomerFormProps) {
         },
       },
   });
+  console.log(initialData);
   const createMutation = useCreateCustomer();
   const updateMutation = useUpdateCustomer();
   const steps = [
@@ -88,10 +87,22 @@ export function useCustomerForm({ initialData, mode }: UseCustomerFormProps) {
     { id: "addresses", title: "Adresses", description: "Facturation et postale" },
     { id: "legal", title: "Infos légales", description: "SIREN, statut" },
     { id: "billing", title: "Facturation", description: "Mode et coefficients" },
-    // { id: "payment", title: "Paiement", description: "Moyen de paiement" },
+    { id: "payment", title: "Paiement", description: "Moyen de paiement" },
     { id: "review", title: "Révision", description: "Vérification finale" },
   ];
+  useEffect(() => {
+    // Scroll au changement de step
+    const mainContent = document.querySelector('[data-form-container]');
+    if (mainContent) {
+      mainContent.scrollTop = 0;
+    }
 
+    // Alternative: scroll le stepper en vue
+    const stepper = document.querySelector('[data-stepper]');
+    if (stepper) {
+      stepper.scrollIntoView({ behavior: 'smooth', inline:'start' });
+    }
+  }, [currentStep]);
   const handleNext = async () => {
     const fields = getFieldsForStep(currentStep);
     const isValid = await form.trigger(fields as any);
@@ -99,14 +110,6 @@ export function useCustomerForm({ initialData, mode }: UseCustomerFormProps) {
     if (isValid) {
       if (currentStep < steps.length - 1) {
         setCurrentStep((prev) => prev + 1);
-        setTimeout(() => {
-          const mainContent = document.querySelector('[data-form-container]');
-          if (mainContent) {
-            mainContent.scrollTo({ top: 0, behavior: 'smooth' });
-          } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }
-        }, 50);
       }
     }
   };
@@ -114,28 +117,12 @@ export function useCustomerForm({ initialData, mode }: UseCustomerFormProps) {
   const handlePrevious = () => {
     if (currentStep > 0) {
       setCurrentStep((prev) => prev - 1);
-      setTimeout(() => {
-        const mainContent = document.querySelector('[data-form-container]');
-        if (mainContent) {
-          mainContent.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      }, 50);
     }
   };
 
   const handleStepClick = (stepIndex: number) => {
     if (stepIndex <= currentStep) {
       setCurrentStep(stepIndex);
-      setTimeout(() => {
-        const mainContent = document.querySelector('[data-form-container]');
-        if (mainContent) {
-          mainContent.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      }, 50);
     }
   };
   const onSubmit = async (data: CustomerFormData) => {
@@ -143,7 +130,6 @@ export function useCustomerForm({ initialData, mode }: UseCustomerFormProps) {
       setIsSubmitting(true);
 
       if (mode === "create") {
-        data.paymentMethodId = undefined;
         await createMutation.mutateAsync(data, {
           onError: (error) => {
             toast.error(error?.response?.data?.message || ERROR_MESSAGES.ERROR_CREATION);
@@ -169,7 +155,6 @@ export function useCustomerForm({ initialData, mode }: UseCustomerFormProps) {
           },
         });
       } else {
-        data.paymentMethodId = undefined;
         await updateMutation.mutateAsync(
           { id: initialData!.id, data },
           {

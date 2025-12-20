@@ -1,6 +1,3 @@
-// src/features/customers/components/customers-table-view.tsx
-
-"use client";
 
 import {
   Table,
@@ -22,7 +19,7 @@ import {
 } from "@/shared/components/ui/dropdown-menu";
 import { Badge } from "@/shared/components/shadcnui/badge";
 import { MoreVertical, Eye, Edit, Trash, Archive, ArrowUpDown } from "lucide-react";
-import { CustomerListItem, CustomerType } from "../types/customer.types";
+import { CustomerListItem, CustomerType } from "../../types/customer.types";
 import { cn } from "@/shared/lib/utils/cn";
 
 interface CustomersTableViewProps {

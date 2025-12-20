@@ -1,5 +1,3 @@
-// src/shared/components/cards/contact-card-glass-compact.tsx
-
 "use client";
 
 import { useState } from "react";
@@ -19,7 +17,7 @@ import {
   Edit,
   Trash2,
 } from "lucide-react";
-import { CustomerContact, PersonType, PreferredContactMethod } from "../types/customer.types";
+import { CustomerContact, PersonType, PreferredContactMethod } from "../../types/customer.types";
 import { cn } from "@/shared/lib/utils/cn";
 import { toast } from "sonner";
 
@@ -197,10 +195,10 @@ export function ContactCardGlassCompact({ contact, index, onEdit, onDelete }: Co
                     e.stopPropagation();
                     onEdit();
                   }}
-                  className="p-1.5 rounded-md hover:bg-primary/10 transition-colors group/btn"
+                  className="p-1.5 rounded-md hover:bg-primary/10 hover:shadow-sm transition-all "
                   title="Modifier"
                 >
-                  <Edit className="h-3.5 w-3.5 text-primary group-hover/btn:text-primary/80 transition-colors" />
+                  <Edit className="h-3.5 w-3.5  text-primary  opacity-70 hover:opacity-100 transition-opacity " />
                 </Button>
 
               )}

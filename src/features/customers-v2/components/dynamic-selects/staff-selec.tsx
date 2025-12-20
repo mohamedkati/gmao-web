@@ -1,9 +1,7 @@
-// src/shared/components/dynamic-select/staff-select.tsx
-
 "use client";
 
 import { DynamicSelect, SelectOption } from "@/components/ui/dynamic-select";
-import { useStaffSelect } from "../hooks/use-staff-select";
+import { useStaffSelect } from "../../hooks/use-staff-select";
 
 interface StaffSelectProps {
   value?: string;

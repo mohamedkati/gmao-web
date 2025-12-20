@@ -1,5 +1,3 @@
-// src/features/customers/lib/customer.schema.ts
-
 import { z } from 'zod';
 import {
   CustomerType,

@@ -1,16 +1,13 @@
-// src/features/customers/components/customer-budgets-section.tsx
 
 "use client";
 
 import { useState } from "react";
 import { Button } from "@/shared/components/shadcnui/button";
-import { Badge } from "@/shared/components/shadcnui/badge";
 import { Progress } from "@/shared/components/shadcnui/progress";
-import { Plus, Edit, Trash2, DollarSign, Calendar, TrendingUp, AlertCircle, Loader2 } from "lucide-react";
+import { Plus, DollarSign, Calendar, TrendingUp, AlertCircle, Loader2 } from "lucide-react";
 import { Customer } from "../../types/customer.types";
 import { MetricCard } from "@/shared/components/cards";
 import { BudgetFormModal } from "../modals/budget-form-modal";
-import { MaintenanceBudgetFormValues } from "../../schemas/customer.schema";
 import { toast } from "sonner";
 import { cn } from "@/shared/lib/utils/cn";
 import {

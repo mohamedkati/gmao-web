@@ -78,6 +78,8 @@ export interface PaymentMethod {
   id: string;
   name: string;
   terms: string;
+  dueDays: number;
+  days: number;
 }
 
 export interface CustomerContact {
@@ -113,8 +115,8 @@ export interface CustomerListItem {
   sitesCount: number;
   contactsCount: number;
   totalBudget: number;
-  
-  primaryContactEmail?:string;
+
+  primaryContactEmail?: string;
   primaryContactPhone?: string;
   primaryContactName?: string;
   invoiceCity?: string;
@@ -148,7 +150,7 @@ export interface CustomerFormData {
   propertyGroupId?: string;
   siren?: string;
   comment?: string;
-  active?:boolean;
+  active?: boolean;
   // Addresses
   invoiceAddress: Address;
   mailingAddress: Address;

@@ -95,9 +95,9 @@ export default function EditCustomerPage() {
             variant="ghost"
             size="sm"
             onClick={() => router.push(`/customers-v2/${customerId}`)}
-            className="mb-6 -ml-2 backdrop-blur-sm hover:bg-white/10"
+            className="mb-6 -ml-2 backdrop-blur-sm hover:bg-primary/10 hover:text-primary/70"
           >
-            <ChevronLeft className="mr-2 h-4 w-4" />
+            <ChevronLeft className="mr-2 h-4 w-4  " />
             Retour aux détails
           </Button>
 

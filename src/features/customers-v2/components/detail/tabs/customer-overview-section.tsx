@@ -1,5 +1,3 @@
-// src/features/customers/components/customer-overview-section.tsx
-
 "use client";
 
 import { Badge } from "@/shared/components/shadcnui/badge";
@@ -17,12 +15,11 @@ import {
   Star,
   MapPin,
 } from "lucide-react";
-import { Customer, PersonType, PreferredContactMethod } from "../../types/customer.types";
+import { Customer, PersonType, PreferredContactMethod } from "../../../types/customer.types";
 import {
   SectionCard,
   InfoCard,
   ContactInfoRow,
-  StatsCard,
 } from "@/shared/components/cards";
 
 interface CustomerOverviewSectionProps {

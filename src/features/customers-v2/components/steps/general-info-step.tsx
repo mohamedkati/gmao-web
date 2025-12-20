@@ -1,5 +1,3 @@
-// src/features/customers/components/steps/general-info-step.tsx
-
 "use client";
 
 import { UseFormReturn } from "react-hook-form";
@@ -24,9 +22,8 @@ import {
 } from "@/shared/components/shadcnui/select";
 import { Building, Hash, Tag, Users2, Briefcase, User, FileText, CheckCircle2 } from "lucide-react";
 import { CustomerFormData, CustomerType } from "../../types/customer.types";
-import { DynamicSelect } from "@/shared/components/ui/dynamic-select";
-import { PropertyGroupSelect } from "../../dynamic-selects/property-group-select";
-import { StaffSelect } from "../../dynamic-selects/staff-selec";
+import { PropertyGroupSelect } from "../dynamic-selects/property-group-select";
+import { StaffSelect } from "../dynamic-selects/staff-selec";
 
 interface GeneralInfoStepProps {
     form: UseFormReturn<CustomerFormData>;
@@ -126,7 +123,7 @@ export function GeneralInfoStep({ form }: GeneralInfoStepProps) {
                     </div>
                 </FormSection>
 
-                <FormSection title="Type de client" icon={Users2} required>
+                <FormSection title="Type de client" icon={Users2} required className="mt-2">
                     <FormField
                         control={form.control}
                         name="type"

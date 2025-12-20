@@ -1,5 +1,3 @@
-// src/features/customers/components/modals/budget-form-modal.tsx
-
 "use client";
 
 import { useForm } from "react-hook-form";

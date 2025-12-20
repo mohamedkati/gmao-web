@@ -1,5 +1,3 @@
-// src/features/customers/components/steps/legal-info-step.tsx
-
 "use client";
 
 import { UseFormReturn } from "react-hook-form";

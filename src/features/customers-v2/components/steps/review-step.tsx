@@ -1,5 +1,3 @@
-// src/features/customers/components/steps/review-step.tsx
-
 "use client";
 
 import { UseFormReturn } from "react-hook-form";
@@ -26,6 +24,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { CustomerType, BillingMode, InvoiceFrequency, CustomerFormData } from "../../types/customer.types";
+import { getPaymentMethodByIdQuery } from "@/shared/queries/global-business/global.queries";
 
 interface ReviewStepProps {
   form: UseFormReturn<CustomerFormData>;
@@ -35,6 +34,8 @@ interface ReviewStepProps {
 export function ReviewStep({ form, onEditStep }: ReviewStepProps) {
   const data = form.watch();
 
+  const{data:payment,isFetching} = getPaymentMethodByIdQuery(data.paymentMethodId);
+  
   const getTypeIcon = (type: CustomerType) => {
     const icons = {
       [CustomerType.PropertyManager]: Building,
@@ -275,21 +276,21 @@ export function ReviewStep({ form, onEditStep }: ReviewStepProps) {
         onEdit={() => onEditStep(4)}
       >
         {
-        // data.paymentMethod?.name ? (
-        //   <div className="p-5 rounded-lg backdrop-blur-sm bg-gradient-to-br from-primary/10 to-purple-500/10 border border-primary/20">
-        //     <div className="flex items-start gap-3">
-        //       <CreditCard className="h-5 w-5 text-primary mt-0.5" />
-        //       <div>
-        //         <p className="font-semibold mb-1">{data.paymentMethod.name}</p>
-        //         {data.paymentMethod.terms && (
-        //           <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-        //             {data.paymentMethod.terms}
-        //           </p>
-        //         )}
-        //       </div>
-        //     </div>
-        //   </div>
-        // ) : 
+        payment && payment.name ? (
+          <div className="p-5 rounded-lg backdrop-blur-sm bg-gradient-to-br from-primary/10 to-purple-500/10 border border-primary/20">
+            <div className="flex items-start gap-3">
+              <CreditCard className="h-5 w-5 text-primary mt-0.5" />
+              <div>
+                <p className="font-semibold mb-1">{payment.name}</p>
+                {payment.terms && (
+                  <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                    {payment.terms}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : 
         (
           <div className="p-4 rounded-lg backdrop-blur-sm bg-white/30 dark:bg-black/30 border border-white/20">
             <div className="flex items-center gap-3 text-muted-foreground">

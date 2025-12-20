@@ -1,5 +1,3 @@
-// src/shared/hooks/use-advanced-filters.ts
-
 import { useState, useMemo } from "react";
 
 export interface FilterConfig {

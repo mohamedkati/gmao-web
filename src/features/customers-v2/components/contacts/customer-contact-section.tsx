@@ -1,14 +1,11 @@
-// src/features/customers/components/customer-contacts-section.tsx
-
 "use client";
 
 import { useState } from "react";
 import { Button } from "@/shared/components/shadcnui/button";
-import { Plus, Edit, Trash2, MoreVertical, Loader2 } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import { Customer, CustomerContact } from "../../types/customer.types";
-import { ContactCardGlassCompact } from "../contact-card-glass-compact";
+import { ContactCardGlassCompact } from "./contact-card-glass-compact";
 import { ContactFormModal } from "../modals/contact-form-modal";
-import { ContactFormValues } from "../../schemas/customer.schema";
 import { toast } from "sonner";
 import {
     AlertDialog,
@@ -20,7 +17,6 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/shared/components/shadcnui/alert-dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
 import { useDeleteCustomerContact } from "../../hooks/user-customers.query";
 
 interface CustomerContactsSectionProps {

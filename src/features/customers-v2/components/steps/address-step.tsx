@@ -1,5 +1,3 @@
-// src/features/customers/components/steps/addresses-step.tsx
-
 "use client";
 
 import { UseFormReturn } from "react-hook-form";

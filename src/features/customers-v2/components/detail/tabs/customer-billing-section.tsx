@@ -1,8 +1,5 @@
-// src/features/customers/components/customer-billing-section.tsx
-
 "use client";
 
-import { Badge } from "@/shared/components/shadcnui/badge";
 import { Button } from "@/shared/components/shadcnui/button";
 import {
   FileText,
@@ -15,12 +12,11 @@ import {
   Percent,
   DollarSign,
 } from "lucide-react";
-import { Customer, BillingMode, InvoiceFrequency } from "../../types/customer.types";
+import { Customer, BillingMode, InvoiceFrequency } from "../../../types/customer.types";
 import {
   SectionCard,
   StatsCard,
   OptionCheckCard,
-  GlassCard,
 } from "@/shared/components/cards";
 
 interface CustomerBillingSectionProps {
@@ -84,12 +80,15 @@ export function CustomerBillingSection({ customer }: CustomerBillingSectionProps
                 color="purple"
               />
 
-              <StatsCard
-                icon={Calendar}
-                label="Délai de paiement"
-                value={`${customer.billingSettings.paymentTermsDays} jours`}
-                color="green"
-              />
+              {
+                customer.paymentMethod && <StatsCard
+                  icon={Calendar}
+                  label="Délai de paiement"
+                  value={`${customer.paymentMethod.days} jours`}
+                  color="green"
+                />
+              }
+
 
               <StatsCard
                 icon={Percent}
@@ -125,10 +124,10 @@ export function CustomerBillingSection({ customer }: CustomerBillingSectionProps
                 badge={
                   customer.billingSettings.applyLatePaymentFees
                     ? {
-                        label: `${customer.billingSettings.latePaymentFeePercent}%`,
-                        variant: "outline",
-                        className: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20",
-                      }
+                      label: `${customer.billingSettings.latePaymentFeePercent}%`,
+                      variant: "outline",
+                      className: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20",
+                    }
                     : undefined
                 }
               />

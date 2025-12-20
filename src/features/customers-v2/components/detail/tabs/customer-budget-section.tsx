@@ -1,10 +1,7 @@
-// src/features/customers/components/customer-budgets-section.tsx
-
 "use client";
 
 import { Button } from "@/shared/components/shadcnui/button";
 import { Progress } from "@/shared/components/shadcnui/progress";
-import { Badge } from "@/shared/components/shadcnui/badge";
 import {
   DollarSign,
   Calendar,
@@ -12,7 +9,7 @@ import {
   TrendingUp,
   Plus,
 } from "lucide-react";
-import { Customer } from "../../types/customer.types";
+import { Customer } from "../../../types/customer.types";
 import { MetricCard } from "@/shared/components/cards";
 import { cn } from "@/shared/lib/utils/cn";
 

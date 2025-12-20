@@ -1,5 +1,3 @@
-// src/features/customers/components/customer-card.tsx
-
 "use client";
 
 import { useState } from "react";
@@ -29,7 +27,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils/cn";
-import { CustomerListItem, CustomerType } from "../types/customer.types";
+import { CustomerListItem, CustomerType } from "../../types/customer.types";
 
 interface CustomerCardProps {
   customer: CustomerListItem;

@@ -1,4 +1,3 @@
-// src/features/customers/hooks/use-customers.ts
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 // import { customerMockService as customerService } from '../services/customer-mock.service';

@@ -1,7 +1,7 @@
 "use client";
 
 import { DynamicSelect, SelectOption } from "@/components/ui/dynamic-select";
-import { usePropertyGroupSelect } from "../hooks/use-property-group-select";
+import { usePropertyGroupSelect } from "../../hooks/use-property-group-select";
 
 interface PropertyGroupSelectProps {
     value?: string;

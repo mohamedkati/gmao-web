@@ -1,20 +1,18 @@
-// src/app/(dashboard)/customers/page.tsx
-
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useCustomers, useDeleteCustomer } from "@/features/customers-v2/hooks/user-customers.query";
-import { CustomerListItem, Customer } from "../types/customer.types";
+import { CustomerListItem } from "../../types/customer.types";
 import { CustomerQueryParams } from "@/features/customers-v2/types/customer.types";
 import { Button } from "@/shared/components/shadcnui/button";
 import { Input } from "@/shared/components/shadcnui/input";
 import { Skeleton } from "@/shared/components/shadcnui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/shadcnui/card";
-import { CustomerCard } from "@/features/customers-v2/components/customer-card";
-import { CustomersTableView } from "@/features/customers-v2/components/customers-table-view";
-import { CustomerDetailsPanel } from "@/features/customers-v2/components/customer-details-panel";
-import { AdvancedFilters } from "@/features/customers-v2/components/advanced-filters";
-import { ExportMenu } from "@/features/customers-v2/components/export-menu";
+import { CustomerCard } from "@/features/customers-v2/components/listing/customer-card";
+import { CustomersTableView } from "@/features/customers-v2/components/listing/customers-table-view";
+import { CustomerDetailsPanel } from "./customer-details-panel";
+import { AdvancedFilters } from "@/features/customers-v2/components/listing/advanced-filters";
+import { ExportMenu } from "@/features/customers-v2/components/listing/export-menu";
 import { BulkActionsBar } from "@/shared/components/data-table/bulk-actions-bar";
 import { ViewSwitcher } from "@/shared/components/data-table/view-switcher";
 import { Pagination } from "@/shared/components/data-table/pagination";
@@ -36,7 +34,7 @@ import { SkeletonLoader } from "@/shared/components";
 
 type ViewMode = "cards" | "list" | "table";
 
-export default function CustomersPage() {
+export default function CustomersListingPage() {
   const router = useRouter();
 
   // Lire les params depuis l'URL

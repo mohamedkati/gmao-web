@@ -13,8 +13,7 @@ import { LegalInfoStep } from "./steps/legal-info-step";
 import { BillingStep } from "./steps/billing-step";
 // import { PaymentStep } from "./steps/payment-step";
 import { ReviewStep } from "./steps/review-step";
-import { useRouter } from "next/navigation";
-
+import { PaymentStep } from "./steps/payment-step";
 interface CustomerFormProps {
   initialData?: Customer;
   mode: "create" | "edit";
@@ -41,22 +40,21 @@ export function CustomerForm({ initialData, mode }: CustomerFormProps) {
         return <LegalInfoStep form={form} />;
       case 3:
         return <BillingStep form={form} />;
-      //   case 4:
-      //     return <PaymentStep form={form} />;
-      case 4:
+        case 4:
+          return <PaymentStep form={form} />;
+      case 5:
         return <ReviewStep form={form} onEditStep={handleStepClick} />;
       default:
         return null;
     }
   };
 
-  const router = useRouter();
 
   const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === steps.length - 1;
   return (
     <FormProvider {...form} >
-      <form className="space-y-8">
+      <form className="space-y-8" data-stepper>
         {/* Stepper */}
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-500/5 rounded-xl blur-2xl" />
@@ -70,7 +68,7 @@ export function CustomerForm({ initialData, mode }: CustomerFormProps) {
         </div>
 
         {/* Step Content */}
-        <div>{renderStep()}</div>
+        <div data-form-container>{renderStep()}</div>
 
         {/* Navigation */}
         <div className="relative">
