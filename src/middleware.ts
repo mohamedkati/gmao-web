@@ -30,7 +30,7 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('auth-token')?.value;
 
   // Redirect vers login si pas authentifié sur route privée
-  if (!isPublicRoute && !token) {
+  if ((!isPublicRoute && !token) || (!token && pathname === '/')) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);
@@ -41,6 +41,9 @@ export function middleware(request: NextRequest) {
   if (isPublicRoute && token && pathname !== '/') {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
+
+  if(token && pathname === '/')
+    return NextResponse.redirect(new URL('/dashboard', request.url));
 
   // Créer la réponse
   const response = NextResponse.next();
