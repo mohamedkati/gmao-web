@@ -10,7 +10,7 @@ import { Card, CardContent } from "@/shared/components/shadcnui/card";
 import { Separator } from "@/shared/components/shadcnui/separator";
 import { ChevronLeft, ChevronRight, Check, Save, X, AlertCircle } from "lucide-react";
 import { cn } from "@/shared/lib/utils/cn";
-import { Customer, CustomerType, BillingMode, InvoiceFrequency } from "../../types/customer.types";
+import { CustomerListItem, CustomerType, BillingMode, InvoiceFrequency } from "../../../customers-v2/types/customer.types";
 import { Alert, AlertDescription } from "@/shared/components/shadcnui/alert";
 
 // Import steps
@@ -30,7 +30,7 @@ const STEPS = [
 
 interface CustomerFormPageProps {
   mode: "create" | "edit";
-  initialData?: Customer;
+  initialData?: CustomerListItem;
   onSubmit: (data: CustomerFormValues) => void;
   onCancel: () => void;
   isLoading?: boolean;

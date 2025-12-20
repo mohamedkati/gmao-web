@@ -9,7 +9,7 @@ import { Button } from "@/shared/components/shadcnui/button";
 import { Progress } from "@/shared/components/shadcnui/progress";
 import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { cn } from "@/shared/lib/utils/cn";
-import { Customer, CustomerType, BillingMode, InvoiceFrequency } from "../../types/customer.types";
+import { CustomerListItem, CustomerType, BillingMode, InvoiceFrequency } from "../../../customers-v2/types/customer.types";
 
 // Import steps
 import { BasicInfoStep } from "../form-steps/customer-basic-info-step";
@@ -27,7 +27,7 @@ const STEPS = [
 ];
 
 interface CustomerFormProps {
-  initialData?: Customer;
+  initialData?: CustomerListItem;
   onSubmit: (data: CustomerFormValues) => void;
   isLoading?: boolean;
   validationErrors: Record<string, string[]> | undefined;

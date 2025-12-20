@@ -2,19 +2,8 @@
 /**
  * Type générique pour les réponses API paginées
  */
-export interface PaginatedResponse<T> {
-  data: T[];
-  meta: {
-    total: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-  };
-}
 
-/**
- * Type pour les réponses API standard
- */
+
 export interface ApiResponse<T = any> {
   isSucceeded: boolean;
   data: T;
@@ -22,6 +11,15 @@ export interface ApiResponse<T = any> {
   errorMessage?: string;
 }
 
+/**
+ * Type pour les réponses API standard
+ */
+export interface PaginatedResponse<T> extends ApiResponse<T> {
+  totalRecords: number;
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+}
 export interface ApiValidationResponse extends ApiResponse<string> {
   isValidationError: boolean;
   errors: Record<string, string[]>;

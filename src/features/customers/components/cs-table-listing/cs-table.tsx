@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DataTable } from "@/shared/components/data-table/data-table";
 import { createCustomerColumns } from "./cs-columns";
-import { Customer } from "../../types/customer.types";
+import { CustomerListItem } from "../../../customers-v2/types/customer.types";
 import { useCustomerStore } from "../../stores/customer.store";
 import { useDeleteCustomer } from "../../hooks/user-customers.query";
 import {
@@ -22,7 +22,7 @@ import {
 import { Can } from "@/shared/components/auth";
 
 interface CustomersTableProps {
-  data: Customer[];
+  data: CustomerListItem[];
   isLoading?: boolean;
 }
 
@@ -31,7 +31,7 @@ export function CustomersTable({ data, isLoading }: CustomersTableProps) {
   const { openDrawer } = useCustomerStore();
   const deleteMutation = useDeleteCustomer();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
+  const [customerToDelete, setCustomerToDelete] = useState<CustomerListItem | null>(null);
 
   const handleView = (customerId: string) => {
     openDrawer("view", customerId);
@@ -45,7 +45,7 @@ export function CustomersTable({ data, isLoading }: CustomersTableProps) {
     router.push(`/customers/${customerId}/edit`);
   };
 
-  const handleDelete = (customer: Customer) => {
+  const handleDelete = (customer: CustomerListItem) => {
     setCustomerToDelete(customer);
     setDeleteDialogOpen(true);
   };

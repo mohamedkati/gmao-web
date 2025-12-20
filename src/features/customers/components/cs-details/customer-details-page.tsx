@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Customer } from "../../types/customer.types";
+import { CustomerListItem } from "../../../customers-v2/types/customer.types";
 import { Button } from "@/shared/components/shadcnui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/shadcnui/card";
 import { Badge } from "@/shared/components/shadcnui/badge";
@@ -65,7 +65,7 @@ import {
 } from "@/shared/components/shadcnui/alert-dialog";
 
 interface CustomerDetailsPageProps {
-    customer: Customer;
+    customer: CustomerListItem;
 }
 
 export function CustomerDetailsPage({ customer }: CustomerDetailsPageProps) {

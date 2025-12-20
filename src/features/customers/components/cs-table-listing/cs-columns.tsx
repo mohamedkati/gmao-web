@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Customer } from "../../types/customer.types";
+import { CustomerListItem } from "../../../customers-v2/types/customer.types";
 import { Badge } from "@/shared/components/shadcnui/badge";
 import { Button } from "@/shared/components/shadcnui/button";
 import { Checkbox } from "@/shared/components/shadcnui/checkbox";
@@ -33,12 +33,12 @@ interface ColumnActions {
   onViewOnPage: (customerId: string) => void;
   onEdit: (customerId: string) => void;
   onEditPage: (customerId: string) => void;
-  onDelete: (customer: Customer) => void;
+  onDelete: (customer: CustomerListItem) => void;
   onManageContacts: (customerId: string) => void;
   onManageBudgets: (customerId: string) => void;
 }
 
-export const createCustomerColumns = (actions: ColumnActions): ColumnDef<Customer>[] => [
+export const createCustomerColumns = (actions: ColumnActions): ColumnDef<CustomerListItem>[] => [
   {
     id: "select",
     header: ({ table }) => (

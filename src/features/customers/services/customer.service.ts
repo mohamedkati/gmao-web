@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/lib/api/api-client';
-import { Customer, CustomerFormData, CustomerContact, MaintenanceBudget } from '../types/customer.types';
+import { CustomerListItem, CustomerFormData, CustomerContact, MaintenanceBudget } from '../../customers-v2/types/customer.types';
 import { ApiResponse, ApiValidationResponse } from '@/shared/types/common.types';
 
 const BASE_URL = '/customers';
@@ -7,13 +7,13 @@ const BASE_URL = '/customers';
 export const customerService = {
   // Get all customers
   getAll: async (params?: any) => {
-    const response : ApiResponse<Customer[]> = await apiClient.get(BASE_URL, { params });
+    const response : ApiResponse<CustomerListItem[]> = await apiClient.get(BASE_URL, { params });
     return response.data;
   },
 
   // Get customer by ID
   getById: async (id: string) => {
-    const response: ApiResponse<Customer>  = await apiClient.get(`${BASE_URL}/${id}`);
+    const response: ApiResponse<CustomerListItem>  = await apiClient.get(`${BASE_URL}/${id}`);
     return response.data;
   },
 

@@ -75,7 +75,6 @@ export function BillingStep({ form }: any) {
           )}
         />
       </div>
-
       <FormField
         control={form.control}
         name="billingSettings.paymentTermsDays"

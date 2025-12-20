@@ -3,7 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 // import { customerMockService as customerService } from '../services/customer-mock.service';
 import { customerService } from '../services/customer.service';
-import { CustomerFormData, CustomerContact, MaintenanceBudget } from '../types/customer.types';
+import { CustomerFormData, CustomerContact, MaintenanceBudget } from '../../customers-v2/types/customer.types';
 // import { toast } from 'sonner';
 
 // const toast = useGMAOToast();

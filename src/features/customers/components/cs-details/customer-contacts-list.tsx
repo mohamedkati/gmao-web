@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {  CustomerContact } from "../../types/customer.types";
+import {  CustomerContact } from "../../../customers-v2/types/customer.types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/shadcnui/card";
 import { Button } from "@/shared/components/shadcnui/button";
 import { Badge } from "@/shared/components/shadcnui/badge";

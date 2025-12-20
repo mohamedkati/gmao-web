@@ -99,35 +99,47 @@ export interface CustomerContact {
   lastModifiedBy?: string;
 }
 
-export interface Customer {
+export interface CustomerListItem {
   id: string;
   reference: string;
   companyName: string;
   type: CustomerType;
   propertyGroupId?: string;
   propertyGroupName?: string;
-  pricingCoefficients: PricingCoefficients;
-  billingSettings: BillingSettings;
-  maintenanceBudgets: MaintenanceBudget[];
   siren?: string;
-  comment?: string;
   commercialId: string;
   commercialName?: string;
   paymentMethodId?: string;
+  sitesCount: number;
+  contactsCount: number;
+  totalBudget: number;
+  
+  primaryContactEmail?:string;
+  primaryContactPhone?: string;
+  primaryContactName?: string;
+  invoiceCity?: string;
+}
+
+
+
+export interface Customer extends CustomerListItem {
+  pricingCoefficients: PricingCoefficients;
+  billingSettings: BillingSettings;
+  maintenanceBudgets: MaintenanceBudget[];
   invoiceAddress: Address;
   mailingAddress: Address;
   paymentMethod?: PaymentMethod;
   contacts: CustomerContact[];
-  sitesCount: number;
-  contactsCount: number;
-  
+  siren?: string;
+  comment?: string;
+  active?: boolean;
   // Audit
   created: string;
   createdBy?: string;
   lastModified: string;
   lastModifiedBy?: string;
-}
 
+}
 export interface CustomerFormData {
   // Basic Info
   reference: string;
@@ -136,19 +148,19 @@ export interface CustomerFormData {
   propertyGroupId?: string;
   siren?: string;
   comment?: string;
-  
+  active?:boolean;
   // Addresses
   invoiceAddress: Address;
   mailingAddress: Address;
   sameAsInvoiceAddress?: boolean; // Helper for form
-  
+
   // Pricing
   pricingCoefficients: PricingCoefficients;
-  
+
   // Billing
   billingSettings: BillingSettings;
   paymentMethodId?: string;
-  
+
   // Commercial
   commercialId: string;
 }
@@ -169,4 +181,22 @@ export interface CustomerStats {
   governments: number;
   totalBudget: number;
   averageBudget: number;
+}
+
+export interface CustomerQueryParams {
+  // Pagination
+  page?: number;
+  pageSize?: number;
+
+  // Filtres
+  search?: string;
+  types?: number[]; // CustomerType enum values
+  active?: boolean;
+  propertyGroupId?: string;
+  commercialId?: string;
+  city?: string;
+
+  // Tri
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
 }

@@ -6,7 +6,7 @@ import {
   InvoiceFrequency,
   PersonType,
   PreferredContactMethod,
-} from '../types/customer.types';
+} from '../../customers-v2/types/customer.types';
 
 export const customerTypeLabels: Record<CustomerType, string> = {
   [CustomerType.PropertyManager]: 'Gestionnaire immobilier',

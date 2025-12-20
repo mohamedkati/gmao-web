@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import {  CustomerFilters } from '../types/customer.types';
+import {  CustomerFilters } from '../../customers-v2/types/customer.types';
 
 interface CustomerState {
   // Data

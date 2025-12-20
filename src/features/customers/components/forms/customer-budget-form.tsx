@@ -15,7 +15,7 @@ import {
 import { Input } from "@/shared/components/shadcnui/input";
 import { Button } from "@/shared/components/shadcnui/button";
 import { Switch } from "@/shared/components/shadcnui/switch";
-import { MaintenanceBudget } from "../../types/customer.types";
+import { MaintenanceBudget } from "../../../customers-v2/types/customer.types";
 import { formatCurrency } from "../../utils/customer.utils";
 import { Card, CardContent } from "@/shared/components/shadcnui/card";
 import { Calculator } from "lucide-react";

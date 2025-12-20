@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/shadcnui/select";
-import { CustomerContact, PersonType, PreferredContactMethod } from "../../types/customer.types";
+import { CustomerContact, PersonType, PreferredContactMethod } from "../../../customers-v2/types/customer.types";
 import { personTypeLabels, preferredContactMethodLabels } from "../../utils/customer.utils";
 import { useEffect } from "react";
 

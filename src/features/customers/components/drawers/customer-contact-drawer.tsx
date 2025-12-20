@@ -108,7 +108,7 @@ export function CustomerContactDrawer() {
           {
             isEditMode && isLoadingData ?
               <SkeletonLoader type="form" count={5} /> :
-              error ? (
+              error && isEditMode ? (
                 <Alert variant="destructive">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>

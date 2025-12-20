@@ -30,12 +30,12 @@ import { themes } from '@/applib/themes/themes-config';
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Groups', href: '/property-groups', icon: Package },
-  { name: 'Customers',href: '/customers', icon: Users },
+  { name: 'Customers',href: '/customers', icon: Building2 },
+  { name: 'Customers-v2',href: '/customers-v2', icon: Building2 },
   { name: 'Interventions', href: '/work-orders', icon: Wrench },
   { name: 'Maintenances', href: '/maintenance', icon: Calendar },
   { name: 'Contrats', href: '/contracts', icon: FileText },
   { name: 'Stock', href: '/inventory', icon: BoxIcon },
-  { name: 'Clients', href: '/customers', icon: Building2 },
   { name: 'Techniciens', href: '/admin/roles', icon: Users },
   { name: 'Settings', href: '/admin/permissions', icon: BarChart3 },
 ];
@@ -52,7 +52,7 @@ export function Sidebar() {
     if (href === '/dashboard') {
       return pathname === href;
     }
-    return pathname.startsWith(href);
+    return pathname.localeCompare(href) == 0;
   };
   function handleThemeChanging(): void {
     if (theme.name === themes.emerald.name)
