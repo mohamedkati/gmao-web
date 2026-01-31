@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'leaflet/dist/leaflet.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -502,4 +503,91 @@
 
 .customer-card:hover .quick-actions {
   opacity: 1;
+}
+
+
+/* src/app/globals.css - Ajouter ces styles */
+
+/* Custom marker cluster styles */
+.marker-cluster-small {
+  background-color: rgba(59, 130, 246, 0.6);
+}
+.marker-cluster-small div {
+  background-color: rgba(59, 130, 246, 0.8);
+}
+
+.marker-cluster-medium {
+  background-color: rgba(249, 115, 22, 0.6);
+}
+.marker-cluster-medium div {
+  background-color: rgba(249, 115, 22, 0.8);
+}
+
+.marker-cluster-large {
+  background-color: rgba(239, 68, 68, 0.6);
+}
+.marker-cluster-large div {
+  background-color: rgba(239, 68, 68, 0.8);
+}
+
+.marker-cluster {
+  border-radius: 50%;
+}
+
+.marker-cluster div {
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  margin-top: 5px;
+  text-align: center;
+  border-radius: 50%;
+  font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marker-cluster span {
+  line-height: 30px;
+}
+
+/* Custom popup styles */
+.custom-popup .leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 0;
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 0;
+  padding: 16px;
+}
+
+.custom-popup .leaflet-popup-tip {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom marker icon */
+.custom-marker-icon {
+  background: none;
+  border: none;
+}
+
+
+/* src/app/globals.css - Ajouter */
+
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 15s ease infinite;
 }

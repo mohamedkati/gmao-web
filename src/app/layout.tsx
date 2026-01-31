@@ -31,6 +31,9 @@ export const metadata: Metadata = {
   description: 'Gestion de Maintenance Assistée par Ordinateur',
   keywords: ['GMAO', 'maintenance', 'gestion'],
 };
+// src/app/layout.tsx (ajouter avant l'export du RootLayout)
+
+
 
 export default async function RootLayout({
   children,
